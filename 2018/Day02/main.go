@@ -57,28 +57,24 @@ func part1() {
 
 func part2() {
 	codelist := readInput(inputPath)
-	max := len(codelist)
 	for index, code := range codelist { // for each code
 		for i := index + 1; i < len(codelist); i++ { // look at every other code
-			for letter := 0; letter < len(codelist[0]); letter++ {
-
+			diffCount := 0
+			for letter := 0; letter < len(codelist[0]) && diffCount < 2; letter++ {
+				if code[letter] != codelist[i][letter] {
+					diffCount++
+				}
 			}
-		}
-	}
-	for i := 0; i < len(codelist[0]); i++ {
-
-		freq := make(map[rune]int)
-		for _, code := range codelist {
-			freq[rune(code[i])]++
-			fmt.Println(freq[rune(code[i])])
-			if freq[rune(code[i])] == max {
-				fmt.Println(rune(code[i]))
+			if diffCount == 1 {
+				fmt.Printf("%s\n%s\n", code, codelist[i])
 			}
 		}
 	}
 }
 
 func main() {
-	//part1()
+	fmt.Println("Part 1")
+	part1()
+	fmt.Println("Part 2")
 	part2()
 }
