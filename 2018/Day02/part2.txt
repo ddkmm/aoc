@@ -1,0 +1,27 @@
+/*
+func main() {
+	// Array of maps
+	// Each index of the array contains a map which contains
+	// the number of common letters for the code (v) at the
+	// index (k)
+	// the array of maps for common letters
+	s := make([]map[int]int, 0)
+	for k, v := range c {
+		// with code v, compare against all other codes in
+		// list c and count up how many letters are common
+		// add this to the map s
+		m := make(map[int]int)
+		for letterpos, _ := range v {
+			for i, testcode := range c {
+				if i != k {
+					if v[letterpos] == testcode[letterpos] {
+						m[letterpos]++
+					}
+				}
+			}
+		}
+		s = append(s, m)
+	}
+	fmt.Println(s)
+}
+*/
