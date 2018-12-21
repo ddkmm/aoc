@@ -10,25 +10,25 @@ import (
 
 var inputPath = "./input.txt"
 
-// An elf's claim
+// Claim contains an elf's claim
 type Claim struct {
 	coord Coordinates
 	dimen Dimensions
 }
 
-// The upper left hand position of the claim
+// Coordinates describe the upper left hand position of the claim
 type Coordinates struct {
 	X int
 	Y int
 }
 
-// Width x height of the claim
+// Dimensions are the dimensions of the claim
 type Dimensions struct {
 	X int
 	Y int
 }
 
-func part1() {
+func main() {
 	file, err := os.Open(inputPath)
 	if err != nil {
 		panic(err)
@@ -57,6 +57,7 @@ func part1() {
 	// Now plot the fabric values
 	total := 0
 	var fabric [1001][1001]int
+	// Stake the claims
 	for _, v := range claims {
 		claimX := v.coord.X
 		claimY := v.coord.Y
@@ -66,6 +67,7 @@ func part1() {
 			}
 		}
 	}
+
 	for _, v := range fabric {
 		for _, row := range v {
 			if row > 1 {
@@ -73,9 +75,23 @@ func part1() {
 			}
 		}
 	}
-	fmt.Println(total)
-}
+	fmt.Printf("%d overlapping square inches.\n", total)
 
-func main() {
-	part1()
+	// read the claims
+	for k, v := range claims {
+		overlap := false
+		claimX := v.coord.X
+		claimY := v.coord.Y
+		for i := 0; i < v.dimen.Y; i++ {
+			for j := 0; j < v.dimen.X; j++ {
+				if fabric[claimX+j][claimY+i] > 1 {
+					overlap = true
+				}
+			}
+		}
+		if !overlap {
+			fmt.Printf("Claim %d has no overlap\n", k+1)
+		}
+	}
+
 }
