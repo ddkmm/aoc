@@ -4,8 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"strconv"
-	"strings"
 )
 
 var inputPath = "./input.txt"
@@ -39,18 +37,10 @@ func main() {
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		line := scanner.Text()
-		s1 := strings.Split(line, "@")
-		s2 := strings.Split(s1[1], ":")
-		coordinates := s2[0]
-		dimensions := s2[1]
-		s3 := strings.Split(coordinates, ",")
-		x, _ := strconv.Atoi(strings.TrimSpace(s3[0]))
-		y, _ := strconv.Atoi(strings.TrimSpace(s3[1]))
-		coor := Coordinates{x, y}
-		s4 := strings.Split(dimensions, "x")
-		x, _ = strconv.Atoi(strings.TrimSpace(s4[0]))
-		y, _ = strconv.Atoi(strings.TrimSpace(s4[1]))
-		dim := Dimensions{x, y}
+		var claimNum, xCoord, yCoord, xDim, yDim int
+		fmt.Sscanf(line, "#%d @ %d,%d: %dx%d", &claimNum, &xCoord, &yCoord, &xDim, &yDim)
+		coor := Coordinates{xCoord, yCoord}
+		dim := Dimensions{xDim, yDim}
 		claim := Claim{coor, dim}
 		claims = append(claims, claim)
 	}
