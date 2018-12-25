@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strings"
 	"unicode"
 )
 
@@ -23,10 +24,9 @@ func processInput(inputPath string) string {
 	return line
 }
 
-func main() {
-	polymer := processInput(inputPath)
+func reactPolymer(polymer string) {
 	goAgain := true
-	fmt.Println(len(polymer))
+	fmt.Printf("Starting length: %d ", len(polymer))
 	for goAgain {
 		start := true
 		var tempRunes = make([]rune, 1)
@@ -65,11 +65,44 @@ func main() {
 			}
 		}
 		polymer = string(tempRunes)
-		fmt.Println(polymer)
-		fmt.Printf("Removed ")
-		fmt.Printf("%q\n", removed)
-		fmt.Printf("New polymer length: ")
-		fmt.Println(len(polymer))
+		//	fmt.Println(polymer)
+		//	fmt.Printf("Removed ")
+		//	fmt.Printf("%q\n", removed)
+		//	fmt.Printf("New polymer length: ")
+		//	fmt.Println(len(polymer))
 	}
+	fmt.Printf("Final length %d\n", len(polymer))
+}
 
+func stripLetter(polymer string, letter string) string {
+	fmt.Println(letter)
+
+	var tempRunes = make([]rune, 1)
+	for k, v := range polymer {
+		if !strings.EqualFold(string(v), letter) {
+			if k == 0 {
+				tempRunes[k] = v
+			} else {
+				tempRunes = append(tempRunes, v)
+			}
+		}
+	}
+	return string(tempRunes)
+}
+
+func generateAlpha() string {
+	p := make([]byte, 26)
+	for i := range p {
+		p[i] = 'a' + byte(i)
+	}
+	return string(p)
+}
+
+func main() {
+	polymer := processInput(inputPath)
+	reactPolymer(polymer)
+	alphabet := generateAlpha()
+	for _, v := range alphabet {
+		reactPolymer(stripLetter(polymer, string(v)))
+	}
 }
