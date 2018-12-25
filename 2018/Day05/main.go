@@ -7,7 +7,7 @@ import (
 	"unicode"
 )
 
-var inputPath = "./input_test.txt"
+var inputPath = "./input.txt"
 
 func processInput(inputPath string) string {
 	file, err := os.Open(inputPath)
@@ -36,7 +36,7 @@ func main() {
 			v := rune(polymer[k])
 			if k != len(polymer)-1 {
 				if unicode.IsLower(v) {
-					if v == unicode.ToUpper(rune(polymer[k+1])) {
+					if v == unicode.ToLower(rune(polymer[k+1])) && unicode.IsUpper(rune(polymer[k+1])) {
 						goAgain = true
 						removed = append(removed, v)
 						removed = append(removed, rune(polymer[k+1]))
@@ -47,8 +47,8 @@ func main() {
 					} else {
 						tempRunes = append(tempRunes, v)
 					}
-				} else {
-					if v == unicode.ToUpper(rune(polymer[k+1])) {
+				} else if unicode.IsUpper(v) {
+					if v == unicode.ToUpper(rune(polymer[k+1])) && unicode.IsLower(rune(polymer[k+1])) {
 						goAgain = true
 						removed = append(removed, v)
 						removed = append(removed, rune(polymer[k+1]))
