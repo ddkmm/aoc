@@ -24,7 +24,7 @@ func distance(x1 int, x2 int, y1 int, y2 int) int {
 
 func main() {
 	var input []Vertex
-	nullVertex := Vertex{-1, -1}
+	nullVertex := Vertex{0, 0}
 
 	file, err := os.Open(inputPath)
 	if err != nil {
@@ -34,13 +34,12 @@ func main() {
 	scanner := bufio.NewScanner(file)
 	var line string
 	x, y := 0, 0
+	gridDimension := 350
 	xMax, yMax := 0, 0
-	xMin, yMin := 10, 10
-	var grid [10][10]Vertex
+	xMin, yMin := gridDimension, gridDimension
+	var grid [122500]Vertex
 	for i := range grid {
-		for j := range grid[i] {
-			grid[i][j] = nullVertex
-		}
+		grid[i] = nullVertex
 	}
 	for scanner.Scan() {
 		line = scanner.Text()
@@ -60,7 +59,7 @@ func main() {
 		input = append(input, Vertex{x, y})
 	}
 	for _, v := range input {
-		grid[v.X][v.Y] = v
+		grid[v.Y*gridDimension+v.X] = v
 	}
 
 	fmt.Printf("%d coordinates\n", len(input))
@@ -76,47 +75,48 @@ func main() {
 	fmt.Println("Inputs: ", input)
 	fmt.Println("Borders: ", borders)
 
-	for i := range grid {
-		for j := range grid[i] {
-			canWrite := true
-			for _, v := range input {
-				if v.X == i && v.Y == j {
-					canWrite = false
-				}
-			}
-			if canWrite {
-				dCount := 0
-				dFinal := 700
-				vFinal := nullVertex
-				for _, v := range input {
-					d := distance(i, v.X, j, v.Y)
-					if d < dFinal {
-						dFinal = d
-						dCount = 0
-						vFinal = v
-					} else if d == dFinal {
-						dCount++
-						vFinal = nullVertex
-					}
-				}
-				grid[i][j] = vFinal
+	for j := range grid {
+		canWrite := true
+		testX := j % gridDimension
+		testY := int(j / gridDimension)
+		for _, v := range input {
+			if v.X == testX && v.Y == testY {
+				canWrite = false
 			}
 		}
+		if canWrite {
+			dCount := 0
+			dFinal := gridDimension * 2
+			vFinal := nullVertex
+			for _, v := range input {
+				d := distance(testX, v.X, testY, v.Y)
+				if d < dFinal {
+					dFinal = d
+					dCount = 0
+					vFinal = v
+				} else if d == dFinal {
+					dCount++
+					vFinal = nullVertex
+				}
+			}
+			grid[j] = vFinal
+		}
 	}
-
-	for i := range grid {
-		for j := range grid[i] {
-			fmt.Print("  ", grid[i][j], "  ")
+	/*
+		for k, v := range grid {
+			if k%gridDimension == 0 {
+				fmt.Print("\n  ", v, "  ")
+			} else {
+				fmt.Print("  ", v, "  ")
+			}
 		}
 		fmt.Print("\n")
-	}
+	*/
 
 	domains := make(map[Vertex]int)
 
-	for i := range grid {
-		for j := range grid[i] {
-			domains[grid[i][j]]++
-		}
+	for _, v := range grid {
+		domains[v]++
 	}
 
 	hack := map[int]Vertex{}
@@ -130,4 +130,9 @@ func main() {
 		fmt.Println(hack[v], v)
 	}
 
+	for _, v := range input {
+		if grid[v.Y*gridDimension+v.X] != v {
+			fmt.Println("Bang ", v)
+		}
+	}
 }
