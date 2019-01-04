@@ -33,16 +33,12 @@ func main() {
 	var line string
 	x, y := 0, 0
 	const gridDimension int = 500
-	xMax, yMax := 0, 0
-	xMin, yMin := 1000, 1000
 	var grid [gridDimension * gridDimension]vertex
 	for i := range grid {
 		grid[i] = nullVertex
 	}
 	name := 1
-	tl := vertex{1000, 1000}
-	tr := vertex{0, 1000}
-	bl := vertex{1000, 0}
+	tl := vertex{gridDimension - 1, gridDimension - 1}
 	br := vertex{0, 0}
 
 	for scanner.Scan() {
@@ -52,14 +48,6 @@ func main() {
 		// find top left
 		if x <= tl.X && y <= tl.Y {
 			tl = newVertex
-		}
-		// find top right
-		if x >= tr.X && y <= tr.Y {
-			tr = newVertex
-		}
-		// find bottom left
-		if x <= bl.X && y >= bl.Y {
-			bl = newVertex
 		}
 		// find bottom right
 		if x >= br.X && y >= br.Y {
@@ -74,18 +62,22 @@ func main() {
 	}
 
 	fmt.Printf("%d coordinates\n", len(input))
-	xMax = br.X
-	yMax = br.Y
-	xMin = tl.X
-	yMin = tl.Y
-	fmt.Printf("Top left (%d,%d)\n", xMin, yMin)
-	fmt.Printf("Bottom right (%d,%d)\n", xMax, yMax)
+	fmt.Println("Top left ", tl)
+	fmt.Println("Bottom right ", br)
 
 	var borders []vertex
-	borders = append(borders, tl)
-	//	borders = append(borders, tr)
-	//	borders = append(borders, bl)
-	borders = append(borders, br)
+
+	for _, v := range input {
+		if v.X == tl.X || v.X == br.X {
+			borders = append(borders, v)
+			continue
+		}
+		if v.Y == tl.Y || v.Y == br.Y {
+			borders = append(borders, v)
+			continue
+		}
+	}
+
 	fmt.Println("Inputs: ", input)
 	fmt.Println("Borders: ", borders)
 
@@ -116,7 +108,7 @@ func main() {
 			grid[j] = vFinal
 		}
 	}
-	/*
+	if false {
 		for k, v := range grid {
 			if k%gridDimension == 0 {
 				fmt.Print("\n  ", v, "  ")
@@ -125,7 +117,7 @@ func main() {
 			}
 		}
 		fmt.Print("\n")
-	*/
+	}
 
 	// shrink the board down to the topleft/bottom right
 	// and add up only those
