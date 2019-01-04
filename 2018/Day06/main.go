@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-var inputPath = "./inputTest.txt"
+var inputPath = "./input.txt"
 
 type vertex struct {
 	X int
@@ -33,11 +33,8 @@ func main() {
 			grid[i][j] = nullVertex
 		}
 	}
-	var safeGrid [gridDimension][gridDimension]int
 
 	tl := vertex{0, 0}
-	//tr := vertex{0, 0}
-	//bl := vertex{0, 0}
 	br := vertex{0, 0}
 
 	// Read in input coordinates and identify boundary line
@@ -104,7 +101,8 @@ func main() {
 
 	// Add nullVertex to list to be filtered
 	boundary = append(boundary, nullVertex)
-	safeZone := 0
+	safeAreaThreshold := 10000
+	safeArea := 0
 
 	for X := range grid {
 		for Y := range grid[X] {
@@ -116,39 +114,32 @@ func main() {
 					canWrite = false
 				}
 			}
+			dCount := 0
+			dFinal := gridDimension + 1
+			vFinal := nullVertex
+			d := 0
+			totalDistance := 0
+			for _, v := range input {
+				d = distance(X, v.X, Y, v.Y)
+				totalDistance += d
+				if d < dFinal {
+					// This is our best candidate
+					dFinal = d
+					vFinal = v
+					// reset the count
+					dCount = 0
+				} else if d == dFinal {
+					// This is a duplicate but might not be
+					// the shortest distance
+					dCount++
+					vFinal = nullVertex
+				}
+			}
 			if canWrite {
-				//dCount := 0
-				//dFinal := gridDimension + 1
-				vFinal := nullVertex
-				d := 0
-				for _, v := range input {
-					d += distance(X, v.X, Y, v.Y)
-					/* part 1
-					d = distance(X, v.X, Y, v.Y)
-					if d < dFinal {
-						// This is our best candidate
-						dFinal = d
-						vFinal = v
-						// reset the count
-						dCount = 0
-					} else if d == dFinal {
-						// This is a duplicate but might not be
-						// the shortest distance
-						dCount++
-						vFinal = nullVertex
-					}
-					*/
-				}
 				grid[X][Y] = vFinal
-				if d < 32 {
-					safeGrid[X][Y] = d
-					safeZone++
-				} else {
-					safeGrid[X][Y] = 999999
-				}
-			} else {
-				safeGrid[X][Y] = 999999
-				// fmt.Printf("Skipping (%d, %d)\n", X, Y)
+			}
+			if totalDistance < safeAreaThreshold {
+				safeArea++
 			}
 		}
 	}
@@ -181,6 +172,9 @@ func main() {
 			fmt.Println(k, v)
 		}
 	}
+
+	fmt.Println("Max area for part 1: ", maxArea)
+	fmt.Println("Max safe zone for part 2: ", safeArea)
 
 	// error check
 	//
