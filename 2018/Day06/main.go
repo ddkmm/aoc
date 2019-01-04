@@ -5,13 +5,11 @@ import (
 	"fmt"
 	"math"
 	"os"
-	"sort"
 )
 
 var inputPath = "./input.txt"
 
-// Vertex contains coordinates from the input
-type Vertex struct {
+type vertex struct {
 	X int
 	Y int
 }
@@ -23,8 +21,8 @@ func distance(x1 int, x2 int, y1 int, y2 int) int {
 }
 
 func main() {
-	var input []Vertex
-	nullVertex := Vertex{0, 0}
+	var input []vertex
+	nullVertex := vertex{0, 0}
 
 	file, err := os.Open(inputPath)
 	if err != nil {
@@ -34,44 +32,60 @@ func main() {
 	scanner := bufio.NewScanner(file)
 	var line string
 	x, y := 0, 0
-	gridDimension := 350
+	const gridDimension int = 500
 	xMax, yMax := 0, 0
-	xMin, yMin := gridDimension, gridDimension
-	var grid [122500]Vertex
+	xMin, yMin := 1000, 1000
+	var grid [gridDimension * gridDimension]vertex
 	for i := range grid {
 		grid[i] = nullVertex
 	}
+	name := 1
+	tl := vertex{1000, 1000}
+	tr := vertex{0, 1000}
+	bl := vertex{1000, 0}
+	br := vertex{0, 0}
+
 	for scanner.Scan() {
 		line = scanner.Text()
 		fmt.Sscanf(line, "%d, %d", &x, &y, err)
-		if x > xMax {
-			xMax = x
+		newVertex := vertex{x, y}
+		// find top left
+		if x <= tl.X && y <= tl.Y {
+			tl = newVertex
 		}
-		if x <= xMin {
-			xMin = x
+		// find top right
+		if x >= tr.X && y <= tr.Y {
+			tr = newVertex
 		}
-		if y > yMax {
-			yMax = y
+		// find bottom left
+		if x <= bl.X && y >= bl.Y {
+			bl = newVertex
 		}
-		if y <= yMin {
-			yMin = y
+		// find bottom right
+		if x >= br.X && y >= br.Y {
+			br = newVertex
 		}
-		input = append(input, Vertex{x, y})
+
+		input = append(input, newVertex)
+		name++
 	}
 	for _, v := range input {
 		grid[v.Y*gridDimension+v.X] = v
 	}
 
 	fmt.Printf("%d coordinates\n", len(input))
-	fmt.Printf("Max x value is %d, Max y value is %d\n", xMax, yMax)
-	fmt.Printf("Min x value is %d, Min y value is %d\n", xMin, yMin)
+	xMax = br.X
+	yMax = br.Y
+	xMin = tl.X
+	yMin = tl.Y
+	fmt.Printf("Top left (%d,%d)\n", xMin, yMin)
+	fmt.Printf("Bottom right (%d,%d)\n", xMax, yMax)
 
-	var borders []Vertex
-	for _, v := range input {
-		if v.Y == yMin || v.Y == yMax || v.X == xMin || v.X == xMax {
-			borders = append(borders, v)
-		}
-	}
+	var borders []vertex
+	borders = append(borders, tl)
+	//	borders = append(borders, tr)
+	//	borders = append(borders, bl)
+	borders = append(borders, br)
 	fmt.Println("Inputs: ", input)
 	fmt.Println("Borders: ", borders)
 
@@ -113,26 +127,42 @@ func main() {
 		fmt.Print("\n")
 	*/
 
-	domains := make(map[Vertex]int)
+	// shrink the board down to the topleft/bottom right
+	// and add up only those
 
-	for _, v := range grid {
-		domains[v]++
+	domains := make(map[vertex]int)
+
+	// new dimensions of the grid are based on top left and bottom right
+	newGridLength := br.X - tl.X
+	newGridHeight := br.Y - tl.Y
+
+	// starting index is tl.X + tl.Y*gridDimension
+	for yy := 0; yy < newGridHeight; yy++ {
+		for xx := 0; xx < newGridLength; xx++ {
+			// offset the index
+			index := xx + tl.X + (yy+tl.Y)*gridDimension
+			domains[grid[index]]++
+		}
+	}
+	fmt.Println(len(grid))
+	borders = append(borders, nullVertex)
+	for _, i := range borders {
+		fmt.Println("deleting ", i)
+		delete(domains, i)
 	}
 
-	hack := map[int]Vertex{}
-	hackkeys := []int{}
+	fmt.Println(domains)
+	maxArea := 0
 	for k, v := range domains {
-		hack[v] = k
-		hackkeys = append(hackkeys, v)
-	}
-	sort.Ints(hackkeys)
-	for _, v := range hackkeys {
-		fmt.Println(hack[v], v)
+		if v >= maxArea {
+			maxArea = v
+			fmt.Println(v, k)
+		}
 	}
 
 	for _, v := range input {
 		if grid[v.Y*gridDimension+v.X] != v {
-			fmt.Println("Bang ", v)
+			fmt.Println("Bang ", v.Y, ",", v.X, v)
 		}
 	}
 }
