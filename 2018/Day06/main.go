@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-var inputPath = "./input.txt"
+var inputPath = "./inputTest.txt"
 
 type vertex struct {
 	X int
@@ -33,6 +33,8 @@ func main() {
 			grid[i][j] = nullVertex
 		}
 	}
+	var safeGrid [gridDimension][gridDimension]int
+
 	tl := vertex{0, 0}
 	//tr := vertex{0, 0}
 	//bl := vertex{0, 0}
@@ -102,6 +104,7 @@ func main() {
 
 	// Add nullVertex to list to be filtered
 	boundary = append(boundary, nullVertex)
+	safeZone := 0
 
 	for X := range grid {
 		for Y := range grid[X] {
@@ -114,11 +117,13 @@ func main() {
 				}
 			}
 			if canWrite {
-				dCount := 0
-				dFinal := gridDimension + 1
+				//dCount := 0
+				//dFinal := gridDimension + 1
 				vFinal := nullVertex
 				d := 0
 				for _, v := range input {
+					d += distance(X, v.X, Y, v.Y)
+					/* part 1
 					d = distance(X, v.X, Y, v.Y)
 					if d < dFinal {
 						// This is our best candidate
@@ -132,9 +137,17 @@ func main() {
 						dCount++
 						vFinal = nullVertex
 					}
+					*/
 				}
 				grid[X][Y] = vFinal
+				if d < 32 {
+					safeGrid[X][Y] = d
+					safeZone++
+				} else {
+					safeGrid[X][Y] = 999999
+				}
 			} else {
+				safeGrid[X][Y] = 999999
 				// fmt.Printf("Skipping (%d, %d)\n", X, Y)
 			}
 		}
