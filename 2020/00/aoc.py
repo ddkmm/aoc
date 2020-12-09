@@ -1,16 +1,17 @@
 #!/usr/bin/env python
 
 import os
+import re
 
-dir_path = os.path.dirname(os.path.realpath(__file__))
-FILEPATH = os.path.join(dir_path, 'input.txt')
-TESTPATH = os.path.join(dir_path, 'testinput.txt')
+DIRPATH = os.path.dirname(os.path.realpath(__file__))
+FILEPATH = os.path.join(DIRPATH, 'input.txt')
+TESTPATH = os.path.join(DIRPATH, 'testinput.txt')
 
 def main():
-    print("Day {}".format(os.path.split(dir_path)[1]))
+    print("Day {}".format(os.path.split(DIRPATH)[1]))
 
-    with open(FILEPATH) as f:
-        input = f.readlines()
-    print (input)
+    with open(FILEPATH) as file:
+        data = file.readlines()
+    print(data)
 
 main()
