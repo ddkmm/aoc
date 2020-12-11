@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import os
-import re
 import time
 
 DIRPATH = os.path.dirname(os.path.realpath(__file__))
@@ -16,14 +15,37 @@ ME = 'O'
 
 def get_seat(seats, col, row):
     # Returns seat value
-    if (row < 0) or (col < 0):
+    if (row < 0 or col < 0):
         return WALL
-    elif (row >= len(seats[0]) or (col >= len(seats))):
+    if (row >= len(seats[0]) or col >= len(seats)):
         return WALL
-    else:
-        return seats[col][row]
+    return seats[col][row]
 
-def check_adjacent(seats, col, row, rule, isVisible):
+def advance(col, row, direct):
+    if direct == 0:
+        col += -1
+        row += -1
+    elif direct == 1:
+        col += -1
+    elif direct == 2:
+        col += -1
+        row += 1
+    elif direct == 3:
+        row += -1
+    elif direct == 4:
+        row += 1
+    elif direct == 5:
+        col += 1
+        row += -1
+    elif direct == 6:
+        col += 1
+    elif direct == 7:
+        col += 1
+        row += 1
+
+    return col, row
+
+def check_adjacent(seats, col, row, rule, first_visible):
     # Returns True if the rule criteria has been met
     # rule == 1
     #   no adjacent seats are occupied
@@ -32,60 +54,57 @@ def check_adjacent(seats, col, row, rule, isVisible):
     count = 0
 
     # These are our 8 directions to look in.
-    # If isVisible flag is not set,
+    # If first_visible flag is not set,
     #   we only look at the adjacent seat
     # otherwise, we keep looking until we find
     #   a seat or run out of seats to look at
     row_range = [row - 1, row, row + 1]
     col_range = [col - 1, col, col + 1]
 
-    if isVisible:
+    if first_visible:
         threshold = 4
     else:
         threshold = 3
+    direct = 0
 
     for col_val in col_range:
         for row_val in row_range:
-            origin = False
             if ((row_val == row) and (col_val == col)):
                 # Skip the seat we're checking around
                 continue
-            if not isVisible:
+            if not first_visible:
                 # just check once in each direction
                 seat_val = get_seat(seats, col_val, row_val)
                 if seat_val is OCCUPIED:
                     if rule == 1:
                         return False
-                    elif rule == 2:
+                    if rule == 2:
                         count += 1
                         if count > threshold:
                             return True
             else:
                 # look in a direction until we hit something
-                #   not floor 
+                #   not floor
                 temp_col = col_val
                 temp_row = row_val
                 seat_val = get_seat(seats, temp_col, temp_row)
-                while (seat_val != WALL and not origin):
-                    if seat_val is OCCUPIED:
-                        if rule == 1:
-                            return False
-                        elif rule == 2:
-                            count += 1
-                            if count > threshold:
-                                return True
-                    if col_val == 0 and row_val == 0:
-                        origin = True
-                        continue
-                    temp_col += col_val
-                    temp_row += row_val
+                while seat_val == FLOOR:
+                    temp_col, temp_row = advance(temp_col, temp_row, direct)
                     seat_val = get_seat(seats, temp_col, temp_row)
+                if seat_val is OCCUPIED:
+                    if rule == 1:
+                        return False
+                    if rule == 2:
+                        count += 1
+            direct += 1
+
     if rule == 1:
         return True
-    else:
-        return False
+    if count > threshold:
+        return True
+    return False
 
-def rule1(seats, new_seats, isVisible):
+def rule1(seats, new_seats, first_visible):
     # If a seat is empty (L) and
     # there are no occupied seats adjacent to it,
     # the seat becomes occupied.
@@ -93,12 +112,12 @@ def rule1(seats, new_seats, isVisible):
     for col in range(0, len(seats)):
         for row in range(0, len(seats[0])):
             if (seats[col][row] is EMPTY and
-                check_adjacent(seats, col, row, 1, isVisible)):
+                    check_adjacent(seats, col, row, 1, first_visible)):
                 new_seats[col] = new_seats[col][:row] + OCCUPIED + new_seats[col][row+1:]
                 count += 1
     return new_seats, count
 
-def rule2(seats, new_seats, isVisible):
+def rule2(seats, new_seats, first_visible):
     # If a seat is occupied (#) and
     # four or more seats adjacent to it are also occupied,
     # the seat becomes empty.
@@ -106,21 +125,21 @@ def rule2(seats, new_seats, isVisible):
     for col in range(0, len(seats)):
         for row in range(0, len(seats[0])):
             if (seats[col][row] is OCCUPIED and
-                check_adjacent(seats, col, row, 2, isVisible)):
+                    check_adjacent(seats, col, row, 2, first_visible)):
                 new_seats[col] = new_seats[col][:row] + EMPTY + new_seats[col][row+1:]
                 count += -1
     return new_seats, count
 
-def apply_rules(seats, occupied, isVisible):
-    change = 999 
+def apply_rules(seats, occupied, first_visible):
+    change = 999
     iteration = 0
     while change != 0:
         iteration += 1
         change = 0
         new_seats = seats.copy()
-        new_seats, change1 = rule1(seats, new_seats, isVisible)
+        new_seats, change1 = rule1(seats, new_seats, first_visible)
         change += change1
-        seats, change2 = rule2(seats, new_seats, isVisible)
+        seats, change2 = rule2(seats, new_seats, first_visible)
         change += change2
 
         occupied += change
@@ -131,17 +150,17 @@ def apply_rules(seats, occupied, isVisible):
 def part1(seats):
     print("Part 1")
     occupied = 0
-    seats,occupied = apply_rules(seats, occupied, False)
+    seats, occupied = apply_rules(seats, occupied, False)
 
 def part2(seats):
     print("Part 2")
     occupied = 0
-    seats,occupied = apply_rules(seats, occupied, True)
+    seats, occupied = apply_rules(seats, occupied, True)
 
 def main():
     print("Day {}".format(os.path.split(DIRPATH)[1]))
 
-    with open(TEST) as file:
+    with open(FILE) as file:
         seats = file.read().splitlines()
 
     time1 = time.perf_counter()
