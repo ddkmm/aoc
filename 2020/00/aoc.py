@@ -9,8 +9,8 @@ FILEPATH = os.path.join(DIRPATH, 'input.txt')
 TESTPATH = os.path.join(DIRPATH, 'testinput.txt')
 DEBUG = False
 
-def part1(data, debug):
-    if debug:
+def part1(data):
+    if DEBUG:
         print(data)
 
 def main():
@@ -20,7 +20,7 @@ def main():
         data = file.readlines()
 
     time1 = time.perf_counter()
-    part1(data, DEBUG)
+    part1(data)
     time2 = time.perf_counter()
     print("{} seconds".format(time2-time1))
 
