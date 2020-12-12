@@ -7,7 +7,7 @@ import time
 DIRPATH = os.path.dirname(os.path.realpath(__file__))
 FILE = os.path.join(DIRPATH, 'input.txt')
 TEST = os.path.join(DIRPATH, 'testinput.txt')
-DEBUG = False
+DEBUG = True
 
 def Manhattan_distance(x,y):
     if x < 0:
@@ -20,71 +20,90 @@ def Manhattan_distance(x,y):
 COMPASS = ('N', 'E', 'S', 'W')
 
 class Ferry:
-    heading = 'E'
-    position = (0,0)
+    facing = 'E'
+    position = {'X': 0, 'Y': 0}
     compass = {'N': 0, 'E': 1, 'S': 2, 'W': 3}
 
     def Init(self):
-        self.heading = 'E'
-        self.position = (0,0)
+        self.facing = 'E'
+        self.position['X'] = 0
+        self.position['Y'] = 0
 
-    def Turn(self, new_heading):
-        instruction = re.split('(\d+)', new_heading)
+    def SetFacing(self, new_facing):
+        self.facing = new_facing
+    
+    def DoTurn(self, turn_inst):
+        self.SetFacing(self.Turn(turn_inst))
+        if DEBUG:
+            print("New facing: {}".format(self.facing))
+        
+    def Turn(self, turn_inst):
+        instruction = re.split('(\d+)', turn_inst)
         turns = int(int(instruction[1]) / 90)
 
         # get current heading as a starting point
-        # and add our new turns
-        current = self.compass[self.heading]
+        current = self.compass[self.facing]
         
-        if instruction[0] is 'R':
+        # and add our new turns in the right direction
+        if instruction[0] == 'R':
             turns = current + turns
             turns = turns % 4
         else:
             turns = -1 * turns
             turns = current + turns
 
-        self.heading = COMPASS[turns]
-        if DEBUG:
-            print("New heading: {}".format(self.heading))
+        return COMPASS[turns]
 
     def Test_Turn(self):
-        self.heading = 'E'
-        self.Turn('R90')
-        assert(self.heading == 'S')
+        self.facing = 'E'
+        assert(self.Turn('R90') == 'S')
 
-        self.heading = 'E'
-        self.Turn('L90')
-        assert(self.heading == 'N')
+        self.facing = 'E'
+        assert(self.Turn('L90') == 'N')
 
-        self.heading = 'E'
-        self.Turn('L180')
-        assert(self.heading == 'W')
+        self.facing = 'E'
+        assert(self.Turn('L180') == 'W')
 
-        self.heading = 'E'
-        self.Turn('R180')
-        assert(self.heading == 'W')
+        self.facing = 'E'
+        assert(self.Turn('R180') == 'W')
 
-        self.heading = 'E'
-        self.Turn('R270')
-        assert(self.heading == 'N')
+        self.facing = 'E'
+        assert(self.Turn('R270') == 'N')
 
-        self.heading = 'E'
-        self.Turn('L270')
-        assert(self.heading == 'S')
+        self.facing = 'E'
+        assert(self.Turn('L270') == 'S')
 
-        self.heading = 'N'
-        self.Turn('R90')
-        assert(self.heading == 'E')
+        self.facing = 'N'
+        assert(self.Turn('R90') == 'E')
 
-        self.heading = 'N'
-        self.Turn('L90')
-        assert(self.heading == 'W')
+        self.facing = 'N'
+        assert(self.Turn('L90') == 'W')
 
     def Test(self):
         self.Test_Turn()
 
-    def Move(self, course):
-        print("Plot course for {}".format(course))
+    def Move(self, move_inst):
+        print("Plot course for {}".format(move_inst))
+        inst = re.split('(\d+)', move_inst)
+        if inst[0] == 'F':
+            heading = self.facing
+        elif inst[0] == 'R':
+            # do a flip
+            heading = self.Turn('R180')
+        else:
+            heading = inst[0]
+        print("Current position: {}, {} and heading {}".format(self.position['X'], self.position['Y'], heading))
+
+        if heading == 'N':
+            self.position['Y'] += int(inst[1])
+        elif heading == 'S':
+            self.position['Y'] -= int(inst[1])
+        elif heading == 'W':
+            self.position['X'] -= int(inst[1])
+        elif heading == 'E':
+            self.position['X'] += int(inst[1])
+
+        print("New position: {}, {}".format(self.position['X'], self.position['Y']))
 
 
 def part1(nav_data):
@@ -97,9 +116,10 @@ def part1(nav_data):
     for inst in nav_data:
         print(inst)
         if re.search('^R|L',inst):
-            ferry.Turn(inst)
+            ferry.DoTurn(inst)
         else:
             ferry.Move(inst)
+    print("Distance travelled: {}".format(Manhattan_distance(ferry.position['X'], ferry.position['Y'])))
 
 def main():
     print("Day {}".format(os.path.split(DIRPATH)[1]))
