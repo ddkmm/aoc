@@ -87,9 +87,6 @@ class Ferry:
         inst = re.split('(\d+)', move_inst)
         if inst[0] == 'F':
             heading = self.facing
-        elif inst[0] == 'R':
-            # do a flip
-            heading = self.Turn('R180')
         else:
             heading = inst[0]
         print("Current position: {}, {} and heading {}".format(self.position['X'], self.position['Y'], heading))
