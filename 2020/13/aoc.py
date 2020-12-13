@@ -19,29 +19,34 @@ def get_next_bus(bus_id, timestamp):
 
 def get_bus_sequence(timetable):
     e_timetable = enumerate(timetable)
-    bus_time = 0
     res = False
-    while not res:
-        buses = defaultdict(lambda: 0)
+
+    # Delay each bus's start time based on the index
+    times = []
+    for offset, bus in e_timetable:
+        if bus == 'x':
+            times.append(0)
+        else:
+            times.append(-1*offset)
+
+    # Start counting
+    while True:
+        e_timetable = enumerate(timetable)
         for offset, bus in e_timetable:
             if bus != 'x':
-                buses[offset] = bus_time*int(bus) + offset
-        dict_items = buses.items()
-        sorted_items = sorted(dict_items)
-        for offset, bus in sorted_items:
-            if offset == 0:
-                try:
-                    previous = int(bus)
-                except:
-                    print(bus)
-            else:
-                delta = int(bus) - previous
-                if delta != offset:
-                    print(delta, offset)
+                times[offset] += int(bus)
+        check_val = times[0]
+        if check_val == 1068788:
+            print('Bing')
+        res = True
+        for a in times:
+            if a != 0:
+                if a != times:
+                    res = False
                     break
-                else:
-                    print(bus)
-                    continue
+        if res:
+            break
+    print(current_time)
 
 def part1(data):
     print("Part 1")
