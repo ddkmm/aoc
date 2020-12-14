@@ -3,6 +3,7 @@
 import os
 import re
 import time
+from collections import defaultdict
 
 DIRPATH = os.path.dirname(os.path.realpath(__file__))
 DATA = os.path.join(DIRPATH, 'input.txt')
@@ -18,7 +19,7 @@ def calculate_memory_size(data):
             index = int(re.split(r'(\d+)', str(cmd[0]))[1])
             if index > max_memory:
                 max_memory = index
-    return max_memory * 1000
+    return max_memory * 2
 
 def make_mask(mask):
     or_mask = ''
@@ -112,8 +113,7 @@ def part1(data):
 
 def part2(data):
     # initialise
-    max_memory = calculate_memory_size(data)
-    memory = [0] * max_memory
+    memory = defaultdict(lambda: 0)
 
     # Run the docking program
     for inst in data:
@@ -133,7 +133,7 @@ def part2(data):
 
     # Calculate puzzle answer
     for a in memory:
-        total += a
+        total += memory[a]
     print("Part 2: {}".format(total))
 
 def main():
