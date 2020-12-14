@@ -18,7 +18,7 @@ def calculate_memory_size(data):
             index = int(re.split(r'(\d+)', str(cmd[0]))[1])
             if index > max_memory:
                 max_memory = index
-    return max_memory + 1
+    return max_memory * 1000
 
 def make_mask(mask):
     or_mask = ''
@@ -43,8 +43,15 @@ def apply_mask(value, or_mask, and_mask):
         print("After write: {}".format(value))
     return value
 
-def apply_mask2(value, mask):
-    value_string = "{0:036b}".format(value)
+def replace_x(x_bits, prog):
+    for a in x_bits:
+        prog = re.split('X', prog, 1)
+        prog = prog[0] + a + prog[1]
+    print("{}".format(int(prog, 2)))
+    return prog
+
+def apply_mask2(value, mask, memory, index):
+    value_string = "{0:036b}".format(index)
     if DEBUG:
         print("{}".format(value_string))
         print("{}".format(mask))
@@ -54,7 +61,11 @@ def apply_mask2(value, mask):
         if b == '1':
             value_list[i] = b
         if b == 'X':
-           x_bit_size += 1 
+            value_list[i] = b
+            x_bit_size += 1 
+    value_string = ""
+    value_string = value_string.join(value_list)
+
     # Translate X bits into number of permutations
     float_list = []
     for n in range(0,2**x_bit_size):
@@ -62,11 +73,11 @@ def apply_mask2(value, mask):
         n_string = n_string.zfill(x_bit_size)
         float_list.append(list(n_string))
     print(float_list)
+    for bitmask in float_list:
+        new_index = int(replace_x(bitmask, value_string),2)
+        memory[new_index] = value
 
 
-    value_string = ""
-    value_string = value_string.join(value_list)
-    value = int(value_string, 2)
 
     if DEBUG:
         print("{0:036b}".format(value))
@@ -117,7 +128,7 @@ def part2(data):
             # apply mask
             if DEBUG:
                 print("Before write: {}".format(memory[index]))
-            memory[index] = apply_mask2(value, mask)
+            apply_mask2(value, mask, memory, index)
     total = 0
 
     # Calculate puzzle answer
@@ -128,7 +139,7 @@ def part2(data):
 def main():
     print("Day {}".format(os.path.split(DIRPATH)[1]))
 
-    with open(TEST2) as file:
+    with open(DATA) as file:
         data = file.read().splitlines()
 
     time1 = time.perf_counter()
