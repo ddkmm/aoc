@@ -17,70 +17,47 @@ def get_next_bus(bus_id, timestamp):
     wait_time = current_bus_time - timestamp
     print("wait {} * bus {} = {}".format(wait_time, bus_id, bus_id * wait_time))
 
-BUS_OFFSET = 0
-BUS_PERIOD = 1
-BUS_MEMORY = 2
-BUS_MATCH = 3
-
-def get_bus_sequence(timetable):
-    data = []
-    final_bus = len(timetable) - 1
+# Somebody else's solution
+def find_convergence(timetable):
     e_timetable = enumerate(timetable)
-    # make a list of bus data
-    # each bus data contains:
-    #   offset
-    #   period
-    #   memory
-    #   match
+
+    current_tick = 0
+    tick_size = 1
     for offset, bus in e_timetable:
-        if bus != 'x':
-            bus_data = []
-            # offset
-            bus_data.append(offset)
-            # period
-            bus_data.append(int(bus))
-            # memory
-            bus_data.append(int(bus) - offset)
-            # match
-            bus_data.append(False)
-            data.append(bus_data)
+       	if bus == 'x':
+            continue
+        bus = int(bus)
+        needed_remainder = (bus - offset) % bus
+        print("{} = {} - {} % {}".format(needed_remainder, bus, offset, bus))
 
-    # Start counting
-    current_tick = 1
-    finished = False
-    while not finished:
-        target = 0
+        while current_tick % bus - needed_remainder != 0:
+            print("{} % {} = {} - {} != 0".format(current_tick, bus, current_tick % bus, needed_remainder))
+            current_tick += tick_size
 
-        for bus_data in data:
-            keep_going = False
-            nth_bus = 0
-            if bus_data[BUS_OFFSET] == 0:
-                target = current_tick * bus_data[BUS_PERIOD]
-                keep_going = True
-            else:
-                nth_bus += 1
-                current_val = bus_data[BUS_MEMORY]
-                while True:
-                    if current_val > target:
-                        bus_data[BUS_MATCH] = False
-                        keep_going = False
-                        break
-                    elif current_val < target:
-                        bus_data[BUS_MEMORY] = current_val
-                        current_val += bus_data[BUS_PERIOD]
-                    else:
-                        assert current_val == target
-                        bus_data[BUS_MEMORY] = current_val
-                        bus_data[BUS_MATCH] = True
-                        if nth_bus == final_bus:
-                            finished = True
-                        keep_going = True
-                        break
-            if keep_going == False:
-                break
-        current_tick += 1
-        if finished:
-            break
+        print(f"{current_tick:15d} % {bus:3d} = {current_tick % bus:3d}")
+        tick_size = tick_size * bus 
+
+# chinese remainder theorem
+def do_crt(data):
+    # need to make equations in the form
+    # x = b[i] (mod(n[i]))
+    # x = offset (mod(bus_id))
+    # for test input
+    # 7,13,x,x,59,x,31,19
+    # x =   mod(7)
+    # x = 1 mod(13)
+    # x = 4 mod(59)
+    # x = 6 mod(31)
+    # x = 7 mod(19)
+    # table to solve
+    # b[i]*N[i]*x[i]
+    # b[] = (0, 1, 4, 6, 7) 
+    # n[] = (7, 13, 59, 31, 19)
+    # N = 7 * 13 * 59 * 31 * 19 
+    # N[i] = N/n[i]
+    # x is found by iteration
+    return 0
+
 
 def part1(data):
     print("Part 1")
@@ -92,7 +69,7 @@ def part1(data):
 def part2(data):
     print("Part 2")
     timetable = re.split(r',', data[1])
-    get_bus_sequence(timetable)
+    find_convergence(timetable)
 
 def main():
     print("Day {}".format(os.path.split(DIRPATH)[1]))
