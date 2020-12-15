@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import os
-import re
 import time
 from collections import defaultdict
 
@@ -9,7 +8,6 @@ DIRPATH = os.path.dirname(os.path.realpath(__file__))
 DEBUG = False
 
 def part1(numbers):
-    
     # If that was the first time the number has been spoken,
     #   the current player says 0.
     # Otherwise, the number had been spoken before,
@@ -18,14 +16,14 @@ def part1(numbers):
 
     # Test data: (0, 3, 6)
     # Turn    1  2  3  4  5  6  7  8  9 10
-    # Number  0  3  6  0  3  3  1  0  4  0 
+    # Number  0  3  6  0  3  3  1  0  4  0
     # number_history is a dictionary
     #   key is the number
     #   value is a tuple of the last two turns it was spoken
     #       (prev_turn, prev_prev_turn)
     number_history = defaultdict(lambda: (-1, -1))
-    for i, n in enumerate(numbers):
-        number_history[n] = (i + 1, -1)
+    for i, num in enumerate(numbers):
+        number_history[num] = (i + 1, -1)
         # {0:(1, -1)}, {3:(2, -1)}, {6:(3, -1)}
 
     end_turn = 30000000
