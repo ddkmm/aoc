@@ -37,6 +37,20 @@ def find_convergence(timetable):
         print(f"{current_tick:15d} % {bus:3d} = {current_tick % bus:3d}")
         tick_size = tick_size * bus 
 
+
+def temp():
+    b = [7,13]
+    i = 0
+    j = 0
+    while b[0] * i != (b[1] * j) + 1:
+        if b[0]*i > b[1]*j + 1:
+            j += 1
+        elif b[0]*i < b[1]*j+1:
+            i += 1
+    print(b[0]*i, b[1]*j + 1)
+
+        
+
 # chinese remainder theorem
 def do_crt(data):
     # need to make equations in the form
@@ -56,7 +70,33 @@ def do_crt(data):
     # N = 7 * 13 * 59 * 31 * 19 
     # N[i] = N/n[i]
     # x is found by iteration
-    return 0
+    b_list = []
+    n_list = []
+    x_list = []
+    N = 1
+    for b, n in enumerate(data):
+        if n != 'x':
+            b_list.append(b)
+            n_list.append(int(n))
+            N *= int(n)
+            x_list.append(b**(int(n)-2)%int(n))
+    total = 0
+    for i in range(0, len(n_list)):
+        total += b_list[i] * (int(N/n_list[i])) * x_list[i]
+
+  # x = b**(n-2) % n
+  # x =   mod(7)
+    x = 0**(7-2) % 7 
+  # x = 1 mod(13)
+    x = 1**(13-2) % 13 
+  # x = 4 mod(59)
+    x = 4**(59-2) % 59 
+  # x = 6 mod(31)
+    x = 6**(31-2) % 31 
+  # x = 7 mod(19)
+    x = 7**(19-2) % 19 
+
+    return total 
 
 
 def part1(data):
@@ -69,16 +109,17 @@ def part1(data):
 def part2(data):
     print("Part 2")
     timetable = re.split(r',', data[1])
-    find_convergence(timetable)
+    print(do_crt(timetable))
 
 def main():
     print("Day {}".format(os.path.split(DIRPATH)[1]))
 
     with open(TEST) as file:
         data = file.read().splitlines()
+    temp()
 
     time1 = time.perf_counter()
-    part1(data)
+#    part1(data)
     time2 = time.perf_counter()
     print("{} seconds".format(time2-time1))
 
