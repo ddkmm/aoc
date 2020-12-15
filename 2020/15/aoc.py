@@ -16,6 +16,7 @@ def part1(numbers):
     #   the current player announces how many turns apart
     #   the number is from when it was previously spoken.
 
+    # Test data: (0, 3, 6)
     # Turn    1  2  3  4  5  6  7  8  9 10
     # Number  0  3  6  0  3  3  1  0  4  0 
     # number_history is a dictionary
@@ -27,25 +28,27 @@ def part1(numbers):
         number_history[n] = (i + 1, -1)
         # {0:(1, -1)}, {3:(2, -1)}, {6:(3, -1)}
 
-    current_turn = 4
-    end_turn = 10
-    prev_number = 6
+    end_turn = 2020 
+    current_turn = len(numbers) + 1
+    spoken_number = numbers[-1]
     while current_turn <= end_turn:
-        history = number_history[prev_number]
+        history = number_history[spoken_number]
         if history[1] == -1:
             # number was spoken for the first time
             current_number = 0
-            print("Turn {}, number {}".format(current_turn, current_number))
             history = number_history[current_number]
-            history[1] = history[0]
-            history[0] = current_turn
-            number_history[current_number] = history
-            prev_number = 0
+            new_history = (current_turn, history[0])
+            number_history[current_number] = new_history
+            print("Turn {}, number {}".format(current_turn, current_number))
+            spoken_number = current_number
         else:
             # This number was already spoken, find history difference
-            history[0] - history[1]
-
-        prev_turn = current_turn - 1
+            current_number = history[0] - history[1]
+            history = number_history[current_number]
+            new_history = (current_turn, history[0])
+            number_history[current_number] = new_history
+            print("Turn {}, number {}".format(current_turn, current_number))
+            spoken_number = current_number
         current_turn += 1
 
 
@@ -56,7 +59,7 @@ def main():
     test = [0,3,6]
 
     time1 = time.perf_counter()
-    part1(test)
+    part1(data)
     time2 = time.perf_counter()
     print("{} seconds".format(time2-time1))
 
