@@ -6,7 +6,7 @@ import time
 from collections import defaultdict
 
 DIRPATH = os.path.dirname(os.path.realpath(__file__))
-DEBUG = True
+DEBUG = False
 
 def part1(numbers):
     
@@ -28,7 +28,7 @@ def part1(numbers):
         number_history[n] = (i + 1, -1)
         # {0:(1, -1)}, {3:(2, -1)}, {6:(3, -1)}
 
-    end_turn = 2020 
+    end_turn = 30000000
     current_turn = len(numbers) + 1
     spoken_number = numbers[-1]
     while current_turn <= end_turn:
@@ -36,20 +36,17 @@ def part1(numbers):
         if history[1] == -1:
             # number was spoken for the first time
             current_number = 0
-            history = number_history[current_number]
-            new_history = (current_turn, history[0])
-            number_history[current_number] = new_history
-            print("Turn {}, number {}".format(current_turn, current_number))
-            spoken_number = current_number
         else:
             # This number was already spoken, find history difference
             current_number = history[0] - history[1]
-            history = number_history[current_number]
-            new_history = (current_turn, history[0])
-            number_history[current_number] = new_history
+        history = number_history[current_number]
+        new_history = (current_turn, history[0])
+        number_history[current_number] = new_history
+        if DEBUG:
             print("Turn {}, number {}".format(current_turn, current_number))
-            spoken_number = current_number
+        spoken_number = current_number
         current_turn += 1
+    print("Turn {}, number {}".format(current_turn - 1, current_number))
 
 
 def main():
