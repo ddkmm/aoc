@@ -11,13 +11,36 @@ DEBUG = True
 
 def make_rule(rule):
     assert(len(rule) == 2)
-    rule1 = rule[0]
-    rule2 = rule[1]
-    rule_string = "[{}]|[{}]".format(rule1, rule2)
-    return rule_string
+#    rule = ('2-13', '16-100')
+
+    # rule = ('1-3', '5-7')
+    # ^([1-3]|[5-7])$
+    # rule = ('2-13', '16-100')
+    # ^([2-9]|1[0-3]|1[6-9]|[2-9][0-9]|100)$
+    # rules are of the form 1-13, 16-100
+    # for each part of the rule, need to split around the - 
+    #   and get the start and end digit for each filter
+    regex = "^("
+    part = re.split(r'\W', rule[0])
+    # simple case is both are single digits
+    if (len(part[0]) == 1 and len(part[1]) == 1):
+        regex = regex + "[{}-{}]".format(part[0], part[1])
+    elif (len(part[0]) == 1 and len(part[1]) != 1):
+        digits = re.findall(r'[0-9]', part[1])
+        # digits = ("2", "4")
+        
+    regex = regex + "|"
+    part = re.split(r'\W', rule[1])
+    if (len(part[0]) == 1 and len(part[1]) == 1):
+        regex = regex + "[{}-{}]".format(part[0], part[1])
+
+    regex = regex + ")$"
+    return regex
 
 def check_rule(number, rule):
-    return(re.search(rule, number))
+    if re.search(rule, number):
+        return True
+    return False
 
 def part1(data):
     rule_list = []
