@@ -9,25 +9,15 @@ DATA = os.path.join(DIRPATH, 'input.txt')
 TEST = os.path.join(DIRPATH, 'test.txt')
 DEBUG = True
 
-def do_calc2(equation):
-    if len(equation) == 1 and equation[0].isdigit():
-        return int(equation[0])
-
-    if equation[0] == '(':
-        # reform our character array and find matching pair
-        del equation[0]
-        equation.remove(')')
-        # remove both parentheses
-
-    for index, a in enumerate(equation):
-        if a.isdigit():
-            left = int(a)
-        elif a == '+':
-            left += do_calc(equation[index+1:])
-            return left
-        elif a == '*':
-            left *= do_calc(equation[index+1:])
-            return left
+def do_math(stack):
+    a = stack.pop()
+    op = stack.pop()
+    b = stack.pop()
+    if op == '+':
+        stack.append(str(int(b)+int(a)))
+    elif op == '*':
+        stack.append(str(int(b)*int(a)))
+    return stack
 
 def do_calc(equation):
     calc_stack = []
@@ -39,25 +29,30 @@ def do_calc(equation):
         elif a == '(':
             calc_stack.append(a)
         elif a.isdigit():
-            if calc_stack[-1] == '+': # n + n 
-                calc_stack.pop() # remove operator
-                b = calc_stack.pop()
-                calc_stack.append(str(int(b)+int(a)))
-            elif calc_stack[-1] == '*': # n + n 
-                calc_stack.pop() # remove operator
-                b = calc_stack.pop()
-                calc_stack.append(str(int(b)*int(a)))
-            else:
-                calc_stack.append(a)
+            if len(calc_stack) > 1:
+                op = calc_stack[-1]
+                if op == '+' or op == '*':
+                    calc_stack.append(a)
+                    calc_stack = do_math(calc_stack)
+                else:
+                    calc_stack.append(a)
         elif a == ')':
             # pop back everything into a list until we get the first matching (
             #   pass it back into calc_stack and carry on
-            temp = []
+            temp = 0
             c = calc_stack.pop()
             while c != '(':
-                temp.append(c)
+                temp = c
                 c = calc_stack.pop()
-            calc_stack.append(temp[0])
+            if len(calc_stack) > 1:
+                op = calc_stack[-1]
+                if op == '+' or op == '*':
+                    calc_stack.append(temp)
+                    calc_stack = do_math(calc_stack)
+                else:
+                    calc_stack.append(temp)
+            else:
+                calc_stack.append(temp)
 
     return int(calc_stack.pop())
 
@@ -75,7 +70,7 @@ def part1(data):
 def main():
     print("Day {}".format(os.path.split(DIRPATH)[1]))
 
-    with open(TEST) as file:
+    with open(DATA) as file:
         data = file.read().splitlines()
 
     time1 = time.perf_counter()
