@@ -32,49 +32,34 @@ def do_calc2(equation):
 def do_calc(equation):
     calc_stack = []
     for a in equation:
-        if not calc_stack: 
+        if not calc_stack:
             calc_stack.append(a)
-        else:
-            if a == '+' or a == '*':
+        elif a == '+' or a == '*':
+            calc_stack.append(a)
+        elif a == '(':
+            calc_stack.append(a)
+        elif a.isdigit():
+            if calc_stack[-1] == '+': # n + n 
+                calc_stack.pop() # remove operator
+                b = calc_stack.pop()
+                calc_stack.append(str(int(b)+int(a)))
+            elif calc_stack[-1] == '*': # n + n 
+                calc_stack.pop() # remove operator
+                b = calc_stack.pop()
+                calc_stack.append(str(int(b)*int(a)))
+            else:
                 calc_stack.append(a)
-            elif a == '(':
-                calc_stack.append(a)
-            elif a.isdigit():
-                if calc_stack[-1] == '+': # n + n 
-                    calc_stack.pop() # remove operator
-                    b = calc_stack.pop()
-                    calc_stack.append(str(int(b)+int(a)))
-                elif calc_stack[-1] == '*': # n + n 
-                    calc_stack.pop() # remove operator
-                    b = calc_stack.pop()
-                    calc_stack.append(str(int(b)*int(a)))
-                elif calc_stack[-1] == '(': # ( n
-                    calc_stack.append(a)
-            elif a == ')':
-                while calc_stack[-1] != '(':
-                    a = calc_stack.pop()
-                    if a.isdigit():
-                        if calc_stack[-1] == '+': # n + n 
-                            calc_stack.pop() # remove operator
-                            b = calc_stack.pop()
-                            calc_stack.append(str(int(b)+int(a)))
-                        elif calc_stack[-1] == '*': # n + n 
-                            calc_stack.pop() # remove operator
-                            b = calc_stack.pop()
-                            calc_stack.append(str(int(b)*int(a)))
-                calc_stack.pop() # remove (
-                calc_stack.append(a)
+        elif a == ')':
+            # pop back everything into a list until we get the first matching (
+            #   pass it back into calc_stack and carry on
+            temp = []
+            c = calc_stack.pop()
+            while c != '(':
+                temp.append(c)
+                c = calc_stack.pop()
+            calc_stack.append(temp[0])
 
-    if len(calc_stack) != 1:
-        a = calc_stack.pop()
-        op = calc_stack.pop()
-        b = calc_stack.pop()
-        if op == '*':
-            return int(a) * int(b)
-        elif op == '+':
-            return int(a) + int(b)
-    else:
-        return int(calc_stack.pop())
+    return int(calc_stack.pop())
 
 def part1(data):
     reg = re.compile(r'\d+|[\(\)\*\+]')
