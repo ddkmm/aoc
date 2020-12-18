@@ -101,8 +101,8 @@ def do_calc2(equation):
             while c != '(':
                 temp_stack.append(c)
                 c = calc_stack.pop()
-            if len(temp_stack) > 1:
-                temp_stack = do_math(temp_stack)
+            while len(temp_stack) > 1:
+                temp_stack = multiply(temp_stack)
             temp = temp_stack.pop()
             if len(calc_stack) > 1:
                 op = calc_stack[-1]
