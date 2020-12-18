@@ -1,31 +1,18 @@
 import os
-import re
 import time
-import numpy as np
+import math
 
 DIRPATH = os.path.dirname(os.path.realpath(__file__))
 DATA = os.path.join(DIRPATH, 'input.txt')
 TEST = os.path.join(DIRPATH, 'test.txt')
-DEBUG = True
+DEBUG = False
 ACTIVE = '#'
 INACTIVE = '.'
 
-# If a cube is active and
-#   exactly 2 or 3 of its neighbors are also active,
-#   the cube remains active.
-# Otherwise, the cube becomes inactive.
 
-# If a cube is inactive but
-#   exactly 3 of its neighbors are active,
-#   the cube becomes active.
-# Otherwise, the cube remains inactive.
 
 class Cube:
-    x = 0
-    y = 0
-    z = 0
-
-    def __init__(self, x = 0, y = 0, z = 0):
+    def __init__(self, x, y, z):
         self.x = x 
         self.y = y
         self.z = z
@@ -43,36 +30,137 @@ class Cube:
     def get_pos(self):
         return self.x, self.y, self.z
 
-    def set_pos(self, x, y, z):
-        self.x = x
-        self.y = y
-        self.z = z
+# RULE 1
+# If a cube is active and
+#   exactly 2 or 3 of its neighbors are also active,
+#   the cube remains active.
+ # Otherwise, the cube becomes inactive.
+def stay_active(world, cube):
+    x0, y0, z0 = cube.get_pos() 
+    spread = (-1, 0, 1)
+    count = 0
+    for z in spread:
+        for y in spread:
+            for x in spread:
+                temp_cube = Cube(x0 + x, y0 + y, z0 + z)
+                if DEBUG:
+                    print("neighbour {}".format(str(temp_cube)))
+                if temp_cube == cube:
+                    if DEBUG:
+                        print("Self, skip")
+                    continue
+                elif temp_cube in world:
+                    if DEBUG:
+                        print("Active")
+                    count += 1
+                else:
+                    if DEBUG:
+                        print("Inactive")
+
+    if 1 < count < 4:
+        if DEBUG:
+            print("{}: {} active neighbours.".format(str(cube), count))
+            print("Remains active")
+        # remain active
+        return True
+    # become inactive
+    if DEBUG:
+        print("{}: {} active neighbours. {} becomes inactive.".format(str(cube), count, str(cube)))
+    return False
+
+# RULE 2
+# If a cube is inactive but
+#   exactly 3 of its neighbors are active,
+#   the cube becomes active.
+# Otherwise, the cube remains inactive.
+def stay_inactive(world, cube):
+    x0, y0, z0 = cube.get_pos() 
+    spread = (-1, 0, 1)
+    count = 0
+    for z in spread:
+        for y in spread:
+            for x in spread:
+                temp_cube = Cube(x0 + x, y0 + y, z0 + z)
+                if DEBUG:
+                    print("neighbour {}".format(str(temp_cube)))
+                if temp_cube == cube:
+                    if DEBUG:
+                        print("Self")
+                    continue
+                elif temp_cube in world:
+                    if DEBUG:
+                        print("Active")
+                    count += 1
+                else:
+                    if DEBUG:
+                        print("Inactive")
+    if count == 3:
+        if DEBUG:
+            print("{}: {} active neighbours. {} becomes active.".format(str(cube), count, str(cube)))
+        # become active
+        return False
+
+    if DEBUG:
+        print("{}: {} active neighbours.".format(str(cube), count))
+        print("Stays inactive")
+    # remain inactive
+    return True
+
+def traverse_world(world, x_bound, y_bound, z_bound):
+    new_world = world.copy() 
+
+    for z in range(z_bound[0], z_bound[1]):
+#        print("z = {}".format(z))
+        for y in range(y_bound[0], y_bound[1]):
+            for x in range(x_bound[0], y_bound[1]):
+                cube = Cube(x, y, z)
+                if cube in world:
+                    if DEBUG:
+                        print("Checking active {}".format(str(cube)))
+                    if not stay_active(world, cube):
+                        new_world.remove(cube)
+                else:
+                    if DEBUG:
+                        print("Checking inactive {}".format(str(cube)))
+                    if not stay_inactive(world, cube):
+                        new_world.add(cube)
+#        print(len(new_world))
+    return new_world
+
+def expand_world(x_bound, y_bound, z_bound, cycle):
+    new_x = (x_bound[0]-cycle, x_bound[1]+cycle)
+    new_y = (y_bound[0]-cycle, y_bound[1]+cycle)
+    new_z = (z_bound[0]-cycle, z_bound[1]+cycle)
+    return new_x, new_y, new_z
 
 def part1(data):
     world = set()
     if DEBUG:
         print(data)
-    for y_val, line in enumerate(data):
-        for x_val, cube in enumerate(line):
+
+    x_size = math.floor(len(data[0])/2)
+    y_size = math.floor(len(data)/2)
+
+    # Create world
+    for y_val, line in enumerate(reversed(data),-1*y_size):
+        for x_val, cube in enumerate(line, -1*x_size):
             if cube == ACTIVE:
                 world.add(Cube(x_val, y_val, 0))
     print(len(world))
-    tc = Cube(0,0,0)
-    if tc in world:
-        print("Yes")
-    else:
-        print("No")
-    td = Cube(1,0,0)
-    print(str(td))
-    if td in world:
-        print("Yes")
-    else:
-        print("No")
+
+    for cycle in range(1,7):
+        x_bound = ((-1*x_size) - cycle, x_size + 1 + cycle)
+        y_bound = ((-1*y_size) - cycle, y_size + 1 + cycle)
+        z_bound = (0 - cycle, 1 + cycle)
+        world = traverse_world(world, x_bound, x_bound, z_bound)
+        print("Cycle: {}, {} active".format(cycle, len(world)))
+
+    print(len(world))
 
 def main():
     print("Day {}".format(os.path.split(DIRPATH)[1]))
 
-    with open(TEST) as file:
+    with open(DATA) as file:
         data = file.read().splitlines()
 
     time1 = time.perf_counter()
