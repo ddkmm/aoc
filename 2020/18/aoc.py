@@ -29,7 +29,7 @@ def do_calc(equation):
         elif a == '(':
             calc_stack.append(a)
         elif a.isdigit():
-            if len(calc_stack) > 1:
+            if len(calc_stack) > 0:
                 op = calc_stack[-1]
                 if op == '+' or op == '*':
                     calc_stack.append(a)
