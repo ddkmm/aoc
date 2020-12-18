@@ -111,6 +111,8 @@ def do_calc2(equation):
                     calc_stack = add(calc_stack)
                 elif op == '*':
                     calc_stack.append(temp)
+                    if '*' in calc_stack:
+                        continue
                     calc_stack = multiply(calc_stack)
                 else:
                     calc_stack.append(temp)
@@ -147,13 +149,13 @@ def part2(data):
 def main():
     print("Day {}".format(os.path.split(DIRPATH)[1]))
 
-    with open(TEST) as file:
+    with open(DATA) as file:
         data = file.read().splitlines()
 
-#    time1 = time.perf_counter()
-#    part1(data)
-#    time2 = time.perf_counter()
-#    print("{} seconds".format(time2-time1))
+    time1 = time.perf_counter()
+    part1(data)
+    time2 = time.perf_counter()
+    print("{} seconds".format(time2-time1))
 
     time1 = time.perf_counter()
     part2(data)
