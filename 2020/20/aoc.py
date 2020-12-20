@@ -62,25 +62,23 @@ class Tile:
 class Puzzle:
     def __init__(self, tiles):
         self.size = int(math.sqrt(len(tiles)))
-        canvas = []
-        for col in range(0,self.size):
-            tile_row = []
-            for row in range(0,self.size):
-                tile_row.append(tiles[row + 3*col])
-            canvas.append(tile_row)
-        self.canvas = canvas
+        self.canvas = tiles
 
     def get_corner_product(self):
         corner_prod = 1
-        corner_prod *= self.canvas[0][0].get_id()
-        corner_prod *= self.canvas[0][self.size-1].get_id()
-        corner_prod *= self.canvas[self.size-1][0].get_id()
-        corner_prod *= self.canvas[self.size-1][self.size-1].get_id()
+        corner_prod *= self.canvas[0].get_id()
+        corner_prod *= self.canvas[self.size - 1].get_id()
+        corner_prod *= self.canvas[-self.size].get_id()
+        corner_prod *= self.canvas[-1].get_id()
         return corner_prod
+
+    def solve(self):
+        return True
 
 def part1(puzzle):
     # Now all we need to do is solve the puzzle...
-    print(puzzle.get_corner_product())
+    puzzle.solve()
+    print("Part 1: {}".format(puzzle.get_corner_product()))
 
 def main():
     print("Day {}".format(os.path.split(DIRPATH)[1]))
