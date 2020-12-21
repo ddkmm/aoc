@@ -4,6 +4,7 @@ import os
 import re
 import time
 import math
+from collections import defaultdict
 
 DIRPATH = os.path.dirname(os.path.realpath(__file__))
 DATA = os.path.join(DIRPATH, 'input.txt')
@@ -17,8 +18,8 @@ class Tile:
         self.size = len(image)
         self.top = image[0]
         self.bottom = image[-1]
-        self.left = list(zip(*image))[0]
-        self.right = list(zip(*image))[-1]
+        self.left = ''.join([str(elem) for elem in list(zip(*image))[0]])
+        self.right = ''.join([str(elem) for elem in list(zip(*image))[-1]])
 
     def get_top(self):
         return self.top
@@ -34,6 +35,18 @@ class Tile:
 
     def get_id(self):
         return self.id
+
+    def get_all_edges(self):
+        edges = []
+        edges.append(self.top)
+        edges.append(self.right)
+        edges.append(self.bottom)
+        edges.append(self.left)
+        edges.append(self.top[::-1])
+        edges.append(self.right[::-1])
+        edges.append(self.bottom[::-1])
+        edges.append(self.left[::-1])
+        return edges
         
     def flip(self):
         # swap sides
@@ -41,8 +54,8 @@ class Tile:
         self.right = self.left
         self.left = temp
         # reverse top and bottom
-        self.top.reverse()
-        self.bottom.reverse()
+        self.top[::-1]
+        self.bottom[::-1]
 
     def rotate(self):
         # rotate 90 degrees
@@ -51,9 +64,9 @@ class Tile:
         #   b -> l
         #   l.reverse -> t
         new_right = self.top
-        new_bottom = self.right.reverse()
+        new_bottom = self.right[::-1]
         new_left = self.bottom
-        new_top = self.left.reverse()
+        new_top = self.left[::-1]
         self.top = new_top
         self.right = new_right
         self.bottom = new_bottom
@@ -73,12 +86,93 @@ class Puzzle:
         return corner_prod
 
     def solve(self):
+        for start_tile in self.canvas:
+            for tile in self.canvas:
+                if start_tile.get_id == tile.get_id:
+                    continue
+                print("Compare {} with {}".format(start_tile.get_id(), tile.get_id()))
+                match_right(start_tile, tile)
+            start_tile.rotate()
+            for tile in self.canvas:
+                if start_tile.get_id == tile.get_id:
+                    continue
+                print("Compare {} with {}".format(start_tile.get_id(), tile.get_id()))
+                match_right(start_tile, tile)
+            start_tile.rotate()
+            for tile in self.canvas:
+                if start_tile.get_id == tile.get_id:
+                    continue
+                print("Compare {} with {}".format(start_tile.get_id(), tile.get_id()))
+                match_right(start_tile, tile)
+            start_tile.rotate()
+            for tile in self.canvas:
+                if start_tile.get_id == tile.get_id:
+                    continue
+                print("Compare {} with {}".format(start_tile.get_id(), tile.get_id()))
+                match_right(start_tile, tile)
+
+def match_right(tile1, tile2):
+    for _ in range(0,3):
+        if tile1.get_right() == tile2.get_left():
+            print("Match!")
+            return True
+        tile2.rotate()
+    tile2.flip()
+    tile2.rotate()
+    if tile1.get_right() == tile2.get_left():
+        return True
+    tile2.rotate()
+    tile2.rotate()
+    if tile1.get_right() == tile2.get_left():
+        return True
+
+def step(start_tile, puzzle):
+    for tile in puzzle.canvas:
+        if start_tile.get_id == tile.get_id:
+            continue
+        match_right(start_tile, tile)
+
+def solve_puzzle(start_tile, puzzle):
+    for _ in range(0,3):
+        if step(start_tile, puzzle):
+            print("Match!")
+            return True
+        start_tile.rotate()
+    start_tile.flip()
+    start_tile.rotate()
+    if step(start_tile, puzzle):
+        print("Match!")
+        return True
+    start_tile.rotate()
+    start_tile.rotate()
+    if step(start_tile, puzzle):
+        print("Match!")
         return True
 
 def part1(puzzle):
-    # Now all we need to do is solve the puzzle...
-    puzzle.solve()
-    print("Part 1: {}".format(puzzle.get_corner_product()))
+    edge_dict = defaultdict(lambda: list())
+    tiles = puzzle.canvas
+    # Get all possible edges for every tile and map the ids to edges.
+    # A joining edge will have exactly 2 tiles and boundary edges will only have 1
+    # a corner tile will have exactly two boundary edges
+    for tile in tiles:
+        edges = tile.get_all_edges()
+        for edge in edges:
+            temp = edge_dict[edge]
+            temp.append(tile.id)
+            e1 = {edge: temp}
+            edge_dict.update(e1)
+        edges.clear()
+
+    edge_count = defaultdict(lambda:0)
+    for edge in edge_dict:
+        if len(edge_dict[edge]) == 1:
+            edge_count[edge_dict[edge][0]] += 1
+    prod = 1
+    for tile in edge_count:
+        if edge_count[tile] == 2:
+            prod *= tile
+    print("Part 1: {}".format(prod))
 
 def main():
     print("Day {}".format(os.path.split(DIRPATH)[1]))
@@ -86,16 +180,17 @@ def main():
     # Read data and generate tiles 
     tiles = []
     image = []
-    with open(TEST) as file:
+    with open(DATA) as file:
         for line in file:
             match = re.search(r'\d+', line)
             if match:
                 tile_id = int(match.group())
             elif line != '\n':
-                image.append(line)
+                image.append(line.strip())
             else:
                 new_image = Tile(tile_id, image)
                 tiles.append(new_image)
+                image.clear()
         new_image = Tile(tile_id, image)
         tiles.append(new_image)
 
