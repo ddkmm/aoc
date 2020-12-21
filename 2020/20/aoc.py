@@ -21,21 +21,6 @@ class Tile:
         self.left = ''.join([str(elem) for elem in list(zip(*image))[0]])
         self.right = ''.join([str(elem) for elem in list(zip(*image))[-1]])
 
-    def get_top(self):
-        return self.top
-
-    def get_bottom(self):
-        return self.bottom
-
-    def get_left(self):
-        return self.left
-
-    def get_right(self):
-        return self.right
-
-    def get_id(self):
-        return self.id
-
     def get_all_edges(self):
         edges = []
         edges.append(self.top)
@@ -88,47 +73,47 @@ class Puzzle:
     def solve(self):
         for start_tile in self.canvas:
             for tile in self.canvas:
-                if start_tile.get_id == tile.get_id:
+                if start_tile.id == tile.id:
                     continue
-                print("Compare {} with {}".format(start_tile.get_id(), tile.get_id()))
+                print("Compare {} with {}".format(start_tile.id, tile.id))
                 match_right(start_tile, tile)
             start_tile.rotate()
             for tile in self.canvas:
-                if start_tile.get_id == tile.get_id:
+                if start_tile.id == tile.id:
                     continue
-                print("Compare {} with {}".format(start_tile.get_id(), tile.get_id()))
+                print("Compare {} with {}".format(start_tile.id, tile.get_id))
                 match_right(start_tile, tile)
             start_tile.rotate()
             for tile in self.canvas:
-                if start_tile.get_id == tile.get_id:
+                if start_tile.id == tile.id:
                     continue
-                print("Compare {} with {}".format(start_tile.get_id(), tile.get_id()))
+                print("Compare {} with {}".format(start_tile.id, tile.id))
                 match_right(start_tile, tile)
             start_tile.rotate()
             for tile in self.canvas:
-                if start_tile.get_id == tile.get_id:
+                if start_tile.id == tile.id:
                     continue
-                print("Compare {} with {}".format(start_tile.get_id(), tile.get_id()))
+                print("Compare {} with {}".format(start_tile.id, tile.id))
                 match_right(start_tile, tile)
 
 def match_right(tile1, tile2):
     for _ in range(0,3):
-        if tile1.get_right() == tile2.get_left():
+        if tile1.right == tile2.left:
             print("Match!")
             return True
         tile2.rotate()
     tile2.flip()
     tile2.rotate()
-    if tile1.get_right() == tile2.get_left():
+    if tile1.right == tile2.left:
         return True
     tile2.rotate()
     tile2.rotate()
-    if tile1.get_right() == tile2.get_left():
+    if tile1.right == tile2.left:
         return True
 
 def step(start_tile, puzzle):
     for tile in puzzle.canvas:
-        if start_tile.get_id == tile.get_id:
+        if start_tile.id == tile.id:
             continue
         match_right(start_tile, tile)
 
@@ -164,13 +149,23 @@ def part1(puzzle):
             edge_dict.update(e1)
         edges.clear()
 
-    edge_count = defaultdict(lambda:0)
+    # Collect all unpaired edges
+    single_edges = defaultdict(lambda:0)
     for edge in edge_dict:
         if len(edge_dict[edge]) == 1:
-            edge_count[edge_dict[edge][0]] += 1
+            single_edges[edge] = edge_dict[edge]
+    
+    # count how many single edges each tile has
+    tile_histogram = defaultdict(lambda:0) 
+    for edge in single_edges:
+        tile_id = single_edges[edge][0]
+        val = tile_histogram[tile_id]
+        val += 1
+        tile_histogram[tile_id] = val
+        
     prod = 1
-    for tile in edge_count:
-        if edge_count[tile] == 2:
+    for tile in tile_histogram:
+        if tile_histogram[tile] == 4:
             prod *= tile
     print("Part 1: {}".format(prod))
 
