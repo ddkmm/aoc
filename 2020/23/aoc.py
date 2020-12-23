@@ -7,7 +7,7 @@ import time
 DIRPATH = os.path.dirname(os.path.realpath(__file__))
 DATA = "123487596"
 TEST = "389125467"
-DEBUG = True
+DEBUG = False
 
 def increment_pointer(cups, pointer):
     pointer += 1
@@ -21,19 +21,14 @@ def get_largest(cups):
             largest = c
     return largest
 
-def main():
-    print("Day {}".format(os.path.split(DIRPATH)[1]))
-
-    cups = [int(i) for i in list(DATA)]
-    original = cups.copy()
-    total = len(cups)
-
+def part1(cups):
     current_pointer = 0
     for i in range(100):
         current_cup = cups[current_pointer]
-        print("-- move {} --".format(i+1))
-        print("{}".format(cups))
-        print("current cup {}".format(current_cup))
+        if DEBUG:
+            print("-- move {} --".format(i+1))
+            print("{}".format(cups))
+            print("current cup {}".format(current_cup))
         removed = []
         remove_pointer = increment_pointer(cups, current_pointer)
         for _ in range(3):
@@ -42,7 +37,8 @@ def main():
             except IndexError:
                 remove_pointer = increment_pointer(cups, current_pointer)
                 removed.append(cups.pop(remove_pointer))
-        print("pick up: {}".format(removed))
+        if DEBUG:
+            print("pick up: {}".format(removed))
 
         # get destination cup
         dest_cup = current_cup - 1
@@ -58,7 +54,8 @@ def main():
             dest_cup = get_largest(cups)
             dest_pointer = cups.index(dest_cup)
 
-        print("destination: {}".format(dest_cup))
+        if DEBUG:
+            print("destination: {}".format(dest_cup))
 
         dest_pointer = increment_pointer(cups, dest_pointer) 
         cups.insert(dest_pointer, removed.pop())
@@ -75,5 +72,15 @@ def main():
         output.append(str(cups[print_pointer]))
         print_pointer = increment_pointer(cups, print_pointer)
     print("".join(output))
+
+def main():
+    print("Day {}".format(os.path.split(DIRPATH)[1]))
+
+    cups = [int(i) for i in list(DATA)]
+
+    time1 = time.perf_counter()
+    part1(cups)
+    time2 = time.perf_counter()
+    print("{} seconds".format(time2-time1))
 
 main()
