@@ -4,90 +4,83 @@ import os
 import re
 import time
 from collections import defaultdict
+from itertools import count
 
 DIRPATH = os.path.dirname(os.path.realpath(__file__))
 DATA = os.path.join(DIRPATH, 'input.txt')
+DATA2 = os.path.join(DIRPATH, 'input2.txt')
 TEST = os.path.join(DIRPATH, 'test.txt')
+TEST2 = os.path.join(DIRPATH, 'test2.txt')
 DEBUG = False
 
-def process_rule_dict(rules_dict):
-    rule_0 = rules_dict['0']
+counter = count()
 
-    sep = '|'
-    while True:
-        print("Rule 0 = {}".format(rule_0))
-        
-        # Search for the first digit in the rule
-        match = re.search(r'\d+', rule_0)
-        if not match:
-            break
-        i = match.group()
-        print("Substituting rule {}: {}".format(i, rules_dict[i]))
-        # for each rule number, split on it and generate two new rules,
-        # take the rule to substitute in and split on '|'.
-        # Then use each as a substitution into the original rule
-        rule_0_splits = rule_0.split('|')
-        if DEBUG:
-            print("Split rule0 on |: {}".format(rule_0_splits))
-        new_rule_0 = []
-        for r0 in rule_0_splits:
-            # This is each | separated part of rule 0. Probably could recurse it.
-            original_splits = re.split(i, r0)
-            if DEBUG:
-                print("Split each part on {}: {}".format(i, original_splits))
-            if len(original_splits) == 1:
-#                new_rule_0.append(r0)
-                continue
-            if not i:
-                break
-            sub_rule_splits = rules_dict[i].split('|')
-            if DEBUG:
-                print("Splitting rule {} on |: {}".format(i, sub_rule_splits))
-            # permute the subs into the original_splits
-            new_rules = []
-            for sp in sub_rule_splits:
-                new_rules.append(str(original_splits[0] + sp + original_splits[1]))
-            new_rule_0.append(sep.join(new_rules))
-        if new_rule_0:
-            rule_0 = sep.join(new_rule_0)
+def get_rule(rules_dict, rule):
+    if (rule == 'a' or rule == 'b'):
+        return rule
 
-    if DEBUG:
-        print(rule_0)
+    output = ""
+    if '|' not in rule:
+        matches = re.findall(r'\d+', rule)
+        for m in matches:
+            output += get_rule(rules_dict, rules_dict[m])
+        return output
+    else:
+        rule_parts = rule.split('|')
+        split_out = "({}|{})".format(get_rule(rules_dict, rule_parts[0]), get_rule(rules_dict, rule_parts[1]))
+        return split_out
 
-    return rule_0
-
-def apply_rule(rule_0, mesg):
-    # the rule dictionary contains white space which needs to be cleaned up
-    rule = rule_0.replace(" ", "")
-    print(rule)
-    sep = "|"
-    new_rule_parts = []
-    rule_parts = rule.split('|')
-    for r in rule_parts:
-        new_rule_parts.append(str("\\b" + r + "\\b"))
-    rule = sep.join(new_rule_parts)
-
-    print(rule)
-    regex = re.compile(rule)
-    print(regex)
-    total = 0
-    for line in mesg:
-        if re.search(regex,line):
-            print(line)
-            total += 1
-
-    return total
+def get_rule2(rules_dict, rule):
+    # rule is a or b, so just return it
+    if (rule == 'a' or rule == 'b'):
+        return rule
+    
+    output = ""
+    if '|' not in rule:
+        # This rule has only a single part, so call the function on each rule in it
+        # adding the return value to the string
+        matches = re.findall(r'\d+', rule)
+        for m in matches:
+            output += get_rule2(rules_dict, rules_dict[m])
+        return output
+    else:
+        # otherwise, the rule contains a split, so we call the function on either half
+        # of the split, combining them with a split in the resultant rule string
+        rule_parts = rule.split('|')
+        split_out = "("
+        for rp in range(0,len(rule_parts)-1):
+            split_out += "{}|".format(get_rule2(rules_dict, rule_parts[rp]))
+        split_out += "{})".format(get_rule2(rules_dict, rule_parts[-1]))
+        return split_out
 
 def part1(rules, mesg):
-    # substitute everything for rule 0
-    rule_0 = process_rule_dict(rules)
-    # apply rule 0
-    print("Part 1: {}".format(apply_rule(rule_0, mesg)))
+    my_rule = get_rule(rules, '0')
+    temp = "^" + my_rule + "$"
+    print("Regex is {} characters long".format(len(temp)))
 
-def main():
-    print("Day {}".format(os.path.split(DIRPATH)[1]))
+    total = 0
+    for m in mesg:
+        if (re.match(temp, m)):
+            total += 1
+            if DEBUG:
+                print(m)
+    print("Part 1: {}".format(total))
 
-    with open(TEST) as file:
+def part2(rules, mesg):
+    my_rule = get_rule2(rules, '0')
+    temp = "^" + my_rule + "$"
+    print("Regex is {} characters long".format(len(temp)))
+
+    total = 0
+    for m in mesg:
+        if (re.match(temp, m)):
+            total += 1
+            if DEBUG:
+                print(m)
+    print("Part 2: {}".format(total))
+
+def process_input(input_stream):
+    with open(input_stream) as file:
         data = file.read().splitlines()
 
     rules_dict = {}
@@ -105,16 +98,20 @@ def main():
                 rules_dict[rule[0]] = rule[1]
         elif re.search(r'a|b', line):
             mesg.append(line)
+    return rules_dict, mesg
 
-    # replace a and b
-    for key in rules_dict:
-        value = rules_dict[key]
-        value = re.sub(rule_a, 'a', value)
-        value = re.sub(rule_b, 'b', value)
-        rules_dict[key] = value
+def main():
+    print("Day {}".format(os.path.split(DIRPATH)[1]))
 
+    rules_dict, mesg = process_input(DATA)
     time1 = time.perf_counter()
     part1(rules_dict, mesg)
+    time2 = time.perf_counter()
+    print("{} seconds".format(time2-time1))
+
+    rules_dict, mesg = process_input(DATA2)
+    time1 = time.perf_counter()
+    part2(rules_dict, mesg)
     time2 = time.perf_counter()
     print("{} seconds".format(time2-time1))
 
