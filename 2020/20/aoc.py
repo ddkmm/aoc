@@ -53,8 +53,6 @@ class Tile:
             print(a)
 
     def cycle(self):
-        if DEBUG:
-            print("Cycle call: {}".format(self.orientation))
         if self.orientation < 4:
             self.rotate()
             self.orientation += 1
@@ -71,33 +69,21 @@ class Tile:
             self.orientation = 0
 
     def rotate(self):
-        if DEBUG:
-            print("Before rotate: {}".format(self.id))
-            self.print()
         rot_image = []
         for i in range(0,self.size):
             temp = ''.join([str(elem) for elem in list(zip(*self.image))[i]])[::-1]
             rot_image.append(temp)
         self.image = rot_image
         self.set_edges()
-        if DEBUG:
-            print("After rotate: {}".format(self.id))
-            self.print()
 
     def flip(self):
         # horizontal flip is just reverse each line
-        if DEBUG:
-            print("Before flip: {}".format(self.id))
-            self.print()
         flip_image = []
         for line in self.image:
             temp = line[::-1]
             flip_image.append(temp)
         self.image = flip_image
         self.set_edges()
-        if DEBUG:
-            print("After flip: {}".format(self.id))
-            self.print()
 
 class Puzzle:
     def __init__(self, tiles):
@@ -112,70 +98,6 @@ class Puzzle:
         corner_prod *= self.canvas[-1].get_id()
         return corner_prod
 
-    def solve(self):
-        for start_tile in self.canvas:
-            for tile in self.canvas:
-                if start_tile.id == tile.id:
-                    continue
-                print("Compare {} with {}".format(start_tile.id, tile.id))
-                match_right(start_tile, tile)
-            start_tile.rotate()
-            for tile in self.canvas:
-                if start_tile.id == tile.id:
-                    continue
-                print("Compare {} with {}".format(start_tile.id, tile.get_id))
-                match_right(start_tile, tile)
-            start_tile.rotate()
-            for tile in self.canvas:
-                if start_tile.id == tile.id:
-                    continue
-                print("Compare {} with {}".format(start_tile.id, tile.id))
-                match_right(start_tile, tile)
-            start_tile.rotate()
-            for tile in self.canvas:
-                if start_tile.id == tile.id:
-                    continue
-                print("Compare {} with {}".format(start_tile.id, tile.id))
-                match_right(start_tile, tile)
-
-def match_right(tile1, tile2):
-    for _ in range(0,3):
-        if tile1.right == tile2.left:
-            print("Match!")
-            return True
-        tile2.rotate()
-    tile2.flip()
-    tile2.rotate()
-    if tile1.right == tile2.left:
-        return True
-    tile2.rotate()
-    tile2.rotate()
-    if tile1.right == tile2.left:
-        return True
-
-def step(start_tile, puzzle):
-    for tile in puzzle.canvas:
-        if start_tile.id == tile.id:
-            continue
-        match_right(start_tile, tile)
-
-def solve_puzzle(start_tile, puzzle):
-    for _ in range(0,3):
-        if step(start_tile, puzzle):
-            print("Match!")
-            return True
-        start_tile.rotate()
-    start_tile.flip()
-    start_tile.rotate()
-    if step(start_tile, puzzle):
-        print("Match!")
-        return True
-    start_tile.rotate()
-    start_tile.rotate()
-    if step(start_tile, puzzle):
-        print("Match!")
-        return True
-
 def part1(puzzle):
     edge_dict = defaultdict(lambda: list())
     tiles = puzzle.canvas
@@ -185,11 +107,7 @@ def part1(puzzle):
     for tile in tiles:
         edges = tile.get_all_edges()
         for edge in edges:
-            temp = edge_dict[edge]
-            temp.append(tile.id)
-            e1 = {edge: temp}
-            edge_dict.update(e1)
-        edges.clear()
+            edge_dict[edge].append(tile.id)
 
     # Collect all unpaired edges
     single_edges = defaultdict(lambda:0)
@@ -200,9 +118,7 @@ def part1(puzzle):
     tile_histogram = defaultdict(lambda:0) 
     for edge in single_edges:
         tile_id = single_edges[edge][0]
-        val = tile_histogram[tile_id]
-        val += 1
-        tile_histogram[tile_id] = val
+        tile_histogram[tile_id] += 1
     prod = 1
     corners = []
     for tile in tile_histogram:
@@ -222,12 +138,11 @@ def find_next_tile(current_tile, edge_dict, tile_dict):
     print("Finding edge on tile {}".format(next_tile.id))
     # and rotate it into place
     while next_tile.left != current_tile.right:
-        print(next_tile.left)
         next_tile.cycle()
     print("Found match {}".format(next_tile.left))
     return next_tile
 
-def find_row(starting_tile, length, edge_dict, tile_dict, placed_tiles):
+def find_first_row(starting_tile, length, edge_dict, tile_dict, placed_tiles):
     line = []
     current_tile = starting_tile
     print(edge_dict[current_tile.right])
@@ -239,21 +154,59 @@ def find_row(starting_tile, length, edge_dict, tile_dict, placed_tiles):
         current_tile = next_tile
         line.append(current_tile)
         placed_tiles.add(current_tile)
+    if DEBUG:
+        ids = ""
+        for t in line:
+            ids = ids + " {}".format(t.id)
+        print(ids)
 
     return line, placed_tiles
 
-def part2(tile_dict, corners, edge_dict):
+def find_row(starting_tile, length, edge_dict, tile_dict, placed_tiles, top = True, prev_line = None):
+    line = []
+    current_tile = starting_tile
+    print(edge_dict[current_tile.right])
+    line.append(current_tile)
+    placed_tiles.add(current_tile)
+    print("Starting tile {}".format(current_tile.id))
+    while len(line) < length:
+        next_tile = find_next_tile(current_tile, edge_dict, tile_dict)
+        current_tile = next_tile
+        line.append(current_tile)
+        placed_tiles.add(current_tile)
+    if DEBUG:
+        ids = ""
+        for t in line:
+            ids = ids + " {}".format(t.id)
+        print(ids)
+
+    return line, placed_tiles
+
+
+    return line, placed_tiles
+
+
+def print_puzzle_ids(layout):
+    for line in layout:
+        ids = ""
+        for t in line:
+            ids = ids + " {}".format(t.id)
+        print(ids)
+
+def part2(tile_dict, corners, edge_dict, length):
     # start with first corner
     layout = []
     placed_tiles = set()
     # find tile matching right edge
-    corner = corners[0]
+    corner = corners[1]
     current_tile = tile_dict[corner]
+
     while len(edge_dict[current_tile.right]) != 2:
         print(edge_dict[current_tile.right])
         current_tile.cycle()
 
-    line, placed_tiles = find_row(current_tile, 3, edge_dict, tile_dict, placed_tiles)
+    print("Get first row")
+    line, placed_tiles = find_first_row(current_tile, length, edge_dict, tile_dict, placed_tiles)
     layout.append(line)
 
     # Start next row
@@ -269,25 +222,33 @@ def part2(tile_dict, corners, edge_dict):
     next_tiles.remove(current_tile.id)
     next_tile = tile_dict[next_tiles[0]] 
     current_tile = next_tile
-    line = []
-    line, placed_tiles = find_row(current_tile, 3, edge_dict, tile_dict, placed_tiles)
+    print("Get second row")
+    next_line, placed_tiles = find_row(current_tile, length, edge_dict, tile_dict, placed_tiles, top, layout[0])
     if top:
-        layout.append(line)
+        layout.append(next_line)
         current_tile = layout[1][0]
         next_tiles = edge_dict[current_tile.bottom]
     else:
-        layout.insert(0, line)
+        layout.insert(0, next_line)
         current_tile = layout[0][0]
         next_tiles = edge_dict[current_tile.top]
     next_tiles.remove(current_tile.id)
     next_tile = tile_dict[next_tiles[0]] 
     current_tile = next_tile
     line = []
-    line, placed_tiles = find_row(current_tile, 3, edge_dict, tile_dict, placed_tiles)
+    print("Get third row")
+    try:
+        line, placed_tiles = find_row(current_tile, length, edge_dict, tile_dict, placed_tiles)
+    except:
+        current_tile.flip()
+        line, placed_tiles = find_row(current_tile, length, edge_dict, tile_dict, placed_tiles)
+        
     if top:
         layout.append(line)
     else:
         layout.insert(0, line)
+
+    print_puzzle_ids(layout)
 
     pass
 
@@ -296,7 +257,7 @@ def main():
 
     # Read data and generate tiles 
     tiles = []
-    input = TEST 
+    input = DATA 
     print("Using {}".format(input))
     with open(input) as file:
         for line in file:
@@ -313,6 +274,7 @@ def main():
         tiles.append(new_tile)
 
     puzzle = Puzzle(tiles)
+    length = puzzle.size
     tile_dict = {}
     for tile in tiles:
         tile_dict[tile.id] = tile
@@ -320,7 +282,7 @@ def main():
     time1 = time.perf_counter()
     corners, edge_dict = part1(puzzle)
     time2 = time.perf_counter()
-    part2(tile_dict, corners, edge_dict)
+    part2(tile_dict, corners, edge_dict, length)
     print("{} seconds".format(time2-time1))
 
 main()
