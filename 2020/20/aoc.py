@@ -9,6 +9,7 @@ from collections import defaultdict
 DIRPATH = os.path.dirname(os.path.realpath(__file__))
 DATA = os.path.join(DIRPATH, 'input.txt')
 TEST = os.path.join(DIRPATH, 'test.txt')
+CROP = os.path.join(DIRPATH, 'crop.txt')
 DEBUG = True
 
 class Tile:
@@ -211,6 +212,34 @@ def part2(tiles, tile_dict, corners, edge_dict, length):
     if DEBUG:
         print_puzzle_ids(layout)
 
+    return layout
+
+def border_remover(layout):
+    cropped = []
+    for line in layout:
+        cropped_line = []
+        for tile in line:
+            cropped_line.append(tile.get_centre())
+        cropped.append(cropped_line)
+
+    # for each line, combine each row of each tile together
+    temp = []
+    cropped_length = len(cropped[0][0])
+    for line in cropped:
+        for i in range(cropped_length):
+            dave = []
+            for tile in line:
+                strip = tile[i]
+                for c in strip:
+                    dave.append(c)
+            temp.append(dave)
+    f = open(CROP, "a")
+    for line in temp:
+        sep = ""
+        f.write(sep.join(line))
+        f.write("\n")
+    f.close()
+            
 def main():
     print("Day {}".format(os.path.split(DIRPATH)[1]))
 
@@ -241,7 +270,10 @@ def main():
     time1 = time.perf_counter()
     corners, edge_dict = part1(puzzle)
     time2 = time.perf_counter()
-    part2(tiles, tile_dict, corners, edge_dict, length)
+#    layout = part2(tiles, tile_dict, corners, edge_dict, length)
+#    border_remover(layout)
+    with open(CROP) as file:
+        monsters = file.read().splitlines()
     print("{} seconds".format(time2-time1))
 
 main()
