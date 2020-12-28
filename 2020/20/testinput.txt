@@ -17,8 +17,6 @@ r -> l
 t.reverse -> t
 b.reverse -> b
 
-
-
 401
 502
 603
