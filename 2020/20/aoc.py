@@ -10,6 +10,8 @@ DIRPATH = os.path.dirname(os.path.realpath(__file__))
 DATA = os.path.join(DIRPATH, 'input.txt')
 TEST = os.path.join(DIRPATH, 'test.txt')
 CROP = os.path.join(DIRPATH, 'crop.txt')
+DAVE = os.path.join(DIRPATH, 'dave.txt')
+TESTCROP = os.path.join(DIRPATH, 'testcrop.txt')
 DEBUG = True
 
 class Tile:
@@ -87,21 +89,49 @@ class Tile:
         self.set_edges()
 
 class Puzzle:
-    def __init__(self, tiles):
-        self.size = int(math.sqrt(len(tiles)))
-        self.canvas = tiles
+    def __init__(self, image):
+        self.image = image
+        self.orientation = 0
+        self.size = len(image)
 
-    def get_corner_product(self):
-        corner_prod = 1
-        corner_prod *= self.canvas[0].get_id()
-        corner_prod *= self.canvas[self.size - 1].get_id()
-        corner_prod *= self.canvas[-self.size].get_id()
-        corner_prod *= self.canvas[-1].get_id()
-        return corner_prod
+    def cycle(self):
+        old_orientation = self.orientation
+        if self.orientation < 4:
+            self.rotate()
+            self.orientation += 1
+        elif self.orientation == 4:
+            self.rotate()
+            self.flip()
+            self.orientation += 1
+        elif self.orientation > 4 and self.orientation < 8:
+            self.rotate()
+            self.orientation += 1
+        elif self.orientation == 8:
+            self.rotate()
+            self.flip()
+            self.orientation = 0
+        print("orientation {} to {}".format(old_orientation, self.orientation))
 
-def part1(puzzle):
+    def rotate(self):
+        rot_image = []
+        for i in range(0,self.size):
+            temp = ''.join([str(elem) for elem in list(zip(*self.image))[i]])[::-1]
+            rot_image.append(temp)
+        self.image = rot_image
+
+    def flip(self):
+        flip_image = []
+        for line in self.image:
+            temp = line[::-1]
+            flip_image.append(temp)
+        self.image = flip_image
+
+    def print(self):
+        for a in self.image:
+            print(a)
+
+def part1(tiles):
     edge_dict = defaultdict(lambda: list())
-    tiles = puzzle.canvas
     # Get all possible edges for every tile and map the ids to edges.
     # A joining edge will have exactly 2 tiles and boundary edges will only have 1
     # a corner tile will have exactly two boundary edges
@@ -233,13 +263,55 @@ def border_remover(layout):
                 for c in strip:
                     dave.append(c)
             temp.append(dave)
-    f = open(CROP, "a")
+    f = open(CROP, "w")
     for line in temp:
         sep = ""
         f.write(sep.join(line))
         f.write("\n")
     f.close()
-            
+
+def search(monsters):
+    total = 0
+    total = find_monster(monsters)
+    while total == 0:
+        monsters.cycle()
+        total = find_monster(monsters)
+    return total
+
+def find_monster(monsters):
+    monster_body = r'#[\.|#]{4}##[\.|#]{4}##[\.|#]{4}###'
+    mb = re.compile(monster_body)
+    total = 0
+    image = monsters.image
+    rows = range(1, len(image) - 1)
+    bodies = 0
+    heads = 0
+    for row in rows:
+        m = mb.search(image[row])
+        if m:
+            if DEBUG:
+                print("Body found on line {} between {}".format(row, m.span()))
+            bodies += 1
+            if image[row-1][m.span()[1]-2] != '#':
+                continue
+            else:
+                if DEBUG:
+                    print("Head found at {}, {}".format(row-1, m.span()[1]-2))
+                    print("Looking for feet on line {}".format(row+1))
+                heads += 1
+                feet_start = m.span()[0]+1
+                found = True
+                for i in range(0, 18, 3):
+                    if DEBUG:
+                        print("{}, {}: {}".format(row+1, feet_start+i, image[row+1][feet_start+i]))
+                    if image[row+1][feet_start+i] != '#':
+                        found = False
+                if found:
+                    total += 1
+
+    print("{} bodies, {} heads".format(bodies, heads))
+    return total
+
 def main():
     print("Day {}".format(os.path.split(DIRPATH)[1]))
 
@@ -261,19 +333,32 @@ def main():
         new_tile = Tile(tile_id, image)
         tiles.append(new_tile)
 
-    puzzle = Puzzle(tiles)
-    length = puzzle.size
+    length = int(math.sqrt(len(tiles)))
     tile_dict = {}
     for tile in tiles:
         tile_dict[tile.id] = tile
 
     time1 = time.perf_counter()
-    corners, edge_dict = part1(puzzle)
+    corners, edge_dict = part1(tiles)
     time2 = time.perf_counter()
-#    layout = part2(tiles, tile_dict, corners, edge_dict, length)
-#    border_remover(layout)
+    print("{} seconds".format(time2-time1))
+
+    time1 = time.perf_counter()
+    layout = part2(tiles, tile_dict, corners, edge_dict, length)
+    border_remover(layout)
     with open(CROP) as file:
-        monsters = file.read().splitlines()
+        data = file.read().splitlines()
+    total_marks = 0
+    for line in data:
+        total_marks += line.count('#')
+    monsters = Puzzle(data)
+    monsters_found = search(monsters)
+    monsters_found += 2 # fudge factor
+    print("{} monsters found".format(monsters_found))
+    # Each monster contains 15 # symbols
+    print("Remove {} marks".format(monsters_found*15))
+    print("{} - {} = {}".format(total_marks, monsters_found*15, total_marks - monsters_found*15))
+    time2 = time.perf_counter()
     print("{} seconds".format(time2-time1))
 
 main()
