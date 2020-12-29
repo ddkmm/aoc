@@ -10,9 +10,7 @@ DIRPATH = os.path.dirname(os.path.realpath(__file__))
 DATA = os.path.join(DIRPATH, 'input.txt')
 TEST = os.path.join(DIRPATH, 'test.txt')
 CROP = os.path.join(DIRPATH, 'crop.txt')
-DAVE = os.path.join(DIRPATH, 'dave.txt')
-TESTCROP = os.path.join(DIRPATH, 'testcrop.txt')
-DEBUG = True
+DEBUG = False
 
 class Tile:
     def __init__(self, id, image):
@@ -279,7 +277,7 @@ def search(monsters):
     return total
 
 def find_monster(monsters):
-    monster_body = r'#[\.|#]{4}##[\.|#]{4}##[\.|#]{4}###'
+    monster_body = r'(?=(#.{4}##.{4}##.{4}###))'
     mb = re.compile(monster_body)
     total = 0
     image = monsters.image
@@ -287,18 +285,19 @@ def find_monster(monsters):
     bodies = 0
     heads = 0
     for row in rows:
-        m = mb.search(image[row])
-        if m:
-            if DEBUG:
-                print("Body found on line {} between {}".format(row, m.span()))
+        matched_bodies = mb.finditer(image[row])
+        for m in matched_bodies:
             bodies += 1
-            if image[row-1][m.span()[1]-2] != '#':
+            if DEBUG:
+                print("Body {} found on line {} between {}".format(bodies, row, m.span()))
+            if image[row-1][m.span()[0]+18] != '#':
+                print(image[row-1])
                 continue
             else:
-                if DEBUG:
-                    print("Head found at {}, {}".format(row-1, m.span()[1]-2))
-                    print("Looking for feet on line {}".format(row+1))
                 heads += 1
+                if DEBUG:
+                    print("Head {} found at {}, {}".format(heads, row-1, m.span()[0]+18))
+                    print("Looking for feet on line {}".format(row+1))
                 feet_start = m.span()[0]+1
                 found = True
                 for i in range(0, 18, 3):
@@ -308,8 +307,9 @@ def find_monster(monsters):
                         found = False
                 if found:
                     total += 1
+                    if DEBUG:
+                        print("Monster {} found".format(total))
 
-    print("{} bodies, {} heads".format(bodies, heads))
     return total
 
 def main():
@@ -353,11 +353,10 @@ def main():
         total_marks += line.count('#')
     monsters = Puzzle(data)
     monsters_found = search(monsters)
-    monsters_found += 2 # fudge factor
-    print("{} monsters found".format(monsters_found))
     # Each monster contains 15 # symbols
-    print("Remove {} marks".format(monsters_found*15))
-    print("{} - {} = {}".format(total_marks, monsters_found*15, total_marks - monsters_found*15))
+    remove = 15 * monsters_found
+    print("{} monsters found = {} marks".format(monsters_found, remove))
+    print("{} - {} = {}".format(total_marks, remove, total_marks - remove))
     time2 = time.perf_counter()
     print("{} seconds".format(time2-time1))
 
