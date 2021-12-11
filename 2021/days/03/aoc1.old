@@ -1,0 +1,37 @@
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"strconv"
+)
+
+func main() {
+	file, _ := os.Open("./input.txt")
+	scanner := bufio.NewScanner(file)
+	scanner.Split(bufio.ScanLines)
+	var text []string
+	for scanner.Scan() {
+		text = append(text, scanner.Text())
+	}
+	file.Close()
+
+	for i := 0; i < 12; i++ {
+		var one = 0
+		var zero = 0
+		for _, line := range text {
+			bit, _ := strconv.Atoi(string(line[i]))
+			if bit == 1 {
+				one++
+			} else {
+				zero++
+			}
+		}
+		if one > zero {
+			fmt.Printf("1")
+		} else {
+			fmt.Printf("0")
+		}
+	}
+}
