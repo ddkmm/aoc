@@ -15,11 +15,6 @@ type Graph struct {
 	Visited map[int]bool
 }
 
-type Path struct {
-	History []int
-	Visited map[int]bool
-}
-
 func newGraph(n int) *Graph {
 	return &Graph{
 		Edges:   make([][]int, n),
@@ -62,23 +57,49 @@ func (g *Graph) visited(n int, visited map[int]bool) bool {
 	}
 }
 
-func (g *Graph) findEnd(path Path) {
-	n := path.History[len(path.History)-1]
-	path.Visited[n] = true
+func (g *Graph) findEnd(visited map[int]bool, history []int) [][]int {
+	n := history[len(history)-1]
+	visited[n] = true
 	if g.IDs[n] == "end" {
 		fmt.Printf("Found end: ")
-		fmt.Println(path.History)
+		history = append(history, n)
+		return [][]int{history}
 	}
 	fmt.Printf("%d edges from node %d: ", len(g.Edges[n]), n)
 	fmt.Println(g.Edges[n])
+	paths := [][]int{}
 	for _, node := range g.getNext(n) {
-		if g.visited(node, path.Visited) {
+		if g.visited(node, visited) {
 			continue
 		}
 		fmt.Printf("Calling findEnd on node %d\n", node)
-		path.History = append(path.History, node)
-		g.findEnd(path)
+		history = append(history, node)
+		newPath := append([]int{}, history...)
+		paths = append(paths, g.findEnd(visited, newPath)...)
 	}
+	return paths
+}
+
+func (g *Graph) findPaths(n int, path []int) [][]int {
+	if g.IDs[n] == "end" {
+		path = append(path, n)
+		return [][]int{path}
+	}
+	// Check if we've been to lower case nodes before
+	if strings.ToUpper(g.IDs[n]) != g.IDs[n] {
+		for _, c := range path {
+			if n == c {
+				return [][]int{}
+			}
+		}
+	}
+	paths := [][]int{}
+	path = append(path, n)
+	for _, c := range g.Edges[n] {
+		newPath := append([]int{}, path...)
+		paths = append(paths, g.findPaths(c, newPath)...)
+	}
+	return paths
 }
 
 func makeCave(text []string) *Graph {
@@ -111,12 +132,9 @@ func makeCave(text []string) *Graph {
 func part1(cave *Graph) {
 	defer utils.TimeTrack(time.Now(), "Part 1")
 	var history []int
-	history = append(history, 1)
-	visited := make(map[int]bool)
-	path := Path{history, visited}
-	cave.findEnd(path)
-	//	var answer [][]string
-
+	paths := cave.findPaths(cave.Labels["start"], history)
+	fmt.Println(paths)
+	fmt.Printf("%d", len(paths))
 }
 
 func main() {
