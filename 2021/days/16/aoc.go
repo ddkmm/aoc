@@ -9,6 +9,9 @@ import (
 	"github.com/dkim/aoc/2021/utils"
 )
 
+var totalPackets int = 0
+var totalVersion int = 0
+
 type Trans struct {
 	Message      []Packet
 	versionCount int
@@ -34,7 +37,6 @@ func (p *Packet) getPacketLength() int {
 
 func (p *Packet) getVersion() int {
 	if i, err := strconv.ParseInt(string(p.Version), 2, 0); err == nil {
-		fmt.Printf("Packet version %s: %d\n", string(p.Version), i)
 		return int(i)
 	} else {
 		return -1
@@ -61,6 +63,9 @@ func (p *Packet) setVersion(text []rune) (int, []rune) {
 	for i := 0; i < 3; i++ {
 		p.Version = append(p.Version, text[i])
 	}
+	totalVersion += getInt(p.Version)
+	totalPackets++
+	fmt.Printf("Packet %d, total version %d\n", totalPackets, totalVersion)
 	return p.getVersion(), text[3:]
 }
 
@@ -71,40 +76,37 @@ func (p *Packet) setType(text []rune) (int, []rune) {
 	return p.getType(), text[3:]
 }
 
-func (p *Packet) processLiteral(text []rune) ([]rune, int) {
-	if len(text) == 0 {
-		return nil, 0
+func (p *Packet) processLiteral(text []rune) []rune {
+	if len(text) < 11 {
+		return nil
 	}
-	ver := 0
-	temp := 0
+	fmt.Printf("ProcessLiteral, %d length\n", len(text))
 	if text[0] == '1' {
 		for i := 1; i < 5; i++ {
 			p.Data = append(p.Data, text[i])
 		}
 		p.DataLength += 5
-
-		text, temp = p.processLiteral(text[5:])
-		ver += temp
+		text = p.processLiteral(text[5:])
 	} else {
 		// Part 5-bit payload
 		for i := 1; i < 5; i++ {
 			p.Data = append(p.Data, text[i])
 		}
 		p.DataLength += 5
-		return text[5:], ver
+		return text[5:]
 	}
 	// Nothing more to do
 	//fmt.Println(p)
-	return text, ver
+	return text
 }
 
-func (p *Packet) processOpType0(text []rune) ([]rune, int) {
-	ver := 0
+func (p *Packet) processOpType0(text []rune) []rune {
+	fmt.Printf("Processing type 0 operation: %d in text\n", len(text))
 	if p.LengthID != 0 {
-		return nil, ver
+		return nil
 	}
-	if len(text) == 0 {
-		return nil, ver
+	if len(text) < 22 {
+		return nil
 	}
 
 	// extract 15 bits for length
@@ -113,31 +115,35 @@ func (p *Packet) processOpType0(text []rune) ([]rune, int) {
 		length = append(length, text[i])
 	}
 	opLength := getInt(length)
+	fmt.Printf("Op 0 has %d length\n", opLength)
 	text = text[16:]
+	fmt.Printf("Removed 15 bits for lenth. Now text length is %d\n", len(text))
 
 	// Process the rest of the bits until opLength
 	count := 0
-	for count < int(opLength) {
+	//for count < int(opLength) {
+	for len(text) > 11 {
 		var sp Packet
 		var t int
-		var temp int
-		temp, text = sp.setVersion(text)
-		ver += temp
+		_, text = sp.setVersion(text)
 		count += 3
 		t, text = sp.setType(text)
 		count += 3
+		fmt.Printf("%d length remaining\n", len(text))
 		if t == 4 {
-			text, temp = sp.processLiteral(text)
-			ver += temp
+			fmt.Println("\tStarting literal subpacket")
+			text = sp.processLiteral(text)
+			fmt.Println("\tEnding literal subpacket")
 		} else {
-			text, temp = sp.processOperator(text)
-			ver += temp
+			fmt.Println("\tStarting operator subpacket")
+			text = sp.processOperator(text)
+			fmt.Println("\tEnding operator subpacket")
 		}
 		count += sp.DataLength
 		p.SubPacket = append(p.SubPacket, sp)
+		fmt.Printf("Subpacket finsished. %d processed out of %d from buffer\n", count, opLength)
 	}
-	return text, ver
-
+	return text
 }
 
 func getInt(text []rune) int {
@@ -145,14 +151,14 @@ func getInt(text []rune) int {
 	return int(val)
 }
 
-func (p *Packet) processOpType1(text []rune) ([]rune, int) {
-	ver := 0
+func (p *Packet) processOpType1(text []rune) []rune {
 	if p.LengthID != 1 {
-		return nil, ver
+		return nil
 	}
-	if len(text) == 0 {
-		return nil, ver
+	if len(text) < 23 {
+		return nil
 	}
+	fmt.Printf("Processing type 1 operation: %d in text\n", len(text))
 
 	// 11 bits for number of subpackets
 	var length []rune
@@ -161,45 +167,40 @@ func (p *Packet) processOpType1(text []rune) ([]rune, int) {
 	}
 
 	spCount := getInt(length)
+	fmt.Printf("%d packets\n", spCount)
 	text = text[12:]
 	count := 0
-	for count < int(spCount) {
+	//	for count < int(spCount) {
+	for len(text) > 11 {
 		var sp Packet
 		var t int
-		var temp int
-		temp, text = sp.setVersion(text)
-		ver += temp
+		_, text = sp.setVersion(text)
 		t, text = sp.setType(text)
 		if t == 4 {
-			text, temp = sp.processLiteral(text)
-			ver += temp
+			text = sp.processLiteral(text)
 		} else {
-			text, temp = sp.processOperator(text)
-			ver += temp
+			text = sp.processOperator(text)
 		}
 		fmt.Printf("Sub packet\n")
 		p.SubPacket = append(p.SubPacket, sp)
 		count++
 	}
-	return text, ver
+	return text
 }
 
-func (p *Packet) processOperator(text []rune) ([]rune, int) {
+func (p *Packet) processOperator(text []rune) []rune {
 	if len(text) == 0 {
-		return nil, 0
+		return nil
 	}
-	ver := 0
-	temp := 0
+	fmt.Printf("ProcessOperator, %d length\n", len(text))
 	if text[0] == '0' {
 		p.LengthID = 0
-		text, temp = p.processOpType0(text)
-		ver += temp
+		text = p.processOpType0(text)
 	} else {
 		p.LengthID = 1
-		text, temp = p.processOpType1(text)
-		ver += temp
+		text = p.processOpType1(text)
 	}
-	return text, ver
+	return text
 }
 
 func (t *Trans) process(text []rune) {
@@ -213,13 +214,13 @@ func (t *Trans) process(text []rune) {
 		temp := 0
 		if num == 4 {
 			//fmt.Println("Literal packet")
-			text, temp = p.processLiteral(text)
+			text = p.processLiteral(text)
 			t.Message = append(t.Message, p)
 			t.versionCount += temp
 			t.process(text)
 		} else {
 			//fmt.Println("Operator packet")
-			text, temp = p.processOperator(text)
+			text = p.processOperator(text)
 			t.Message = append(t.Message, p)
 			t.versionCount += temp
 			t.process(text)
@@ -236,7 +237,7 @@ func part1(text []rune) {
 }
 
 func main() {
-	text := utils.ReadInput(0)
+	text := utils.ReadInput(1)
 	runes := []rune(text[0])
 	var out []string
 	for _, i := range runes {
