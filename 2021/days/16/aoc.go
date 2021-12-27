@@ -71,7 +71,10 @@ func (p *Packet) setType(text []rune) (int, []rune) {
 	return p.getType(), text[3:]
 }
 
-func (p *Packet) processLiteral(text []rune, pad bool) ([]rune, int) {
+func (p *Packet) processLiteral(text []rune) ([]rune, int) {
+	if len(text) == 0 {
+		return nil, 0
+	}
 	ver := 0
 	temp := 0
 	if text[0] == '1' {
@@ -80,7 +83,7 @@ func (p *Packet) processLiteral(text []rune, pad bool) ([]rune, int) {
 		}
 		p.DataLength += 5
 
-		text, temp = p.processLiteral(text[5:], pad)
+		text, temp = p.processLiteral(text[5:])
 		ver += temp
 	} else {
 		// Part 5-bit payload
@@ -88,14 +91,10 @@ func (p *Packet) processLiteral(text []rune, pad bool) ([]rune, int) {
 			p.Data = append(p.Data, text[i])
 		}
 		p.DataLength += 5
-		// Identify padding
-		if pad {
-			p.Padding = p.DataLength % 4
-		}
-		return text[5+p.Padding:], ver
+		return text[5:], ver
 	}
 	// Nothing more to do
-	fmt.Println(p)
+	//fmt.Println(p)
 	return text, ver
 }
 
@@ -104,13 +103,16 @@ func (p *Packet) processOpType0(text []rune) ([]rune, int) {
 	if p.LengthID != 0 {
 		return nil, ver
 	}
+	if len(text) == 0 {
+		return nil, ver
+	}
 
 	// extract 15 bits for length
 	var length []rune
 	for i := 1; i < 16; i++ {
 		length = append(length, text[i])
 	}
-	opLength, _ := strconv.ParseInt(string(length), 2, 0)
+	opLength := getInt(length)
 	text = text[16:]
 
 	// Process the rest of the bits until opLength
@@ -125,7 +127,7 @@ func (p *Packet) processOpType0(text []rune) ([]rune, int) {
 		t, text = sp.setType(text)
 		count += 3
 		if t == 4 {
-			text, temp = sp.processLiteral(text, false)
+			text, temp = sp.processLiteral(text)
 			ver += temp
 		} else {
 			text, temp = sp.processOperator(text)
@@ -138,9 +140,17 @@ func (p *Packet) processOpType0(text []rune) ([]rune, int) {
 
 }
 
+func getInt(text []rune) int {
+	val, _ := strconv.ParseInt(string(text), 2, 0)
+	return int(val)
+}
+
 func (p *Packet) processOpType1(text []rune) ([]rune, int) {
 	ver := 0
 	if p.LengthID != 1 {
+		return nil, ver
+	}
+	if len(text) == 0 {
 		return nil, ver
 	}
 
@@ -150,7 +160,7 @@ func (p *Packet) processOpType1(text []rune) ([]rune, int) {
 		length = append(length, text[i])
 	}
 
-	spCount, _ := strconv.ParseInt(string(length), 2, 0)
+	spCount := getInt(length)
 	text = text[12:]
 	count := 0
 	for count < int(spCount) {
@@ -161,7 +171,7 @@ func (p *Packet) processOpType1(text []rune) ([]rune, int) {
 		ver += temp
 		t, text = sp.setType(text)
 		if t == 4 {
-			text, temp = sp.processLiteral(text, false)
+			text, temp = sp.processLiteral(text)
 			ver += temp
 		} else {
 			text, temp = sp.processOperator(text)
@@ -175,6 +185,9 @@ func (p *Packet) processOpType1(text []rune) ([]rune, int) {
 }
 
 func (p *Packet) processOperator(text []rune) ([]rune, int) {
+	if len(text) == 0 {
+		return nil, 0
+	}
 	ver := 0
 	temp := 0
 	if text[0] == '0' {
@@ -191,25 +204,16 @@ func (p *Packet) processOperator(text []rune) ([]rune, int) {
 
 func (t *Trans) process(text []rune) {
 	var p Packet
-	done := true
 	if len(text) == 0 {
 		fmt.Printf("Total version count is %d\n", t.versionCount)
-	} else {
-		for _, r := range text {
-			if r == '1' {
-				done = false
-				break
-			}
-		}
-	}
-	if !done {
+	} else if getInt(text) != 0 {
 		num, text := p.setVersion(text)
 		t.versionCount += num
 		num, text = p.setType(text)
 		temp := 0
 		if num == 4 {
 			//fmt.Println("Literal packet")
-			text, temp = p.processLiteral(text, true)
+			text, temp = p.processLiteral(text)
 			t.Message = append(t.Message, p)
 			t.versionCount += temp
 			t.process(text)
@@ -229,24 +233,6 @@ func part1(text []rune) {
 	var packets []Packet
 	transmission := Trans{packets, 0}
 	transmission.process(text)
-
-	/*
-		version := 0
-			fmt.Println("Counting")
-			for i, p := range transmission.Message {
-				fmt.Printf("Packet %d - ", i)
-				t := p.getType()
-				if t == 4 {
-					version += p.getVersion()
-				} else {
-					version += p.getVersion()
-					for _, sp := range p.SubPacket {
-						version += sp.getVersion()
-					}
-				}
-			}
-			fmt.Printf("Version total is %d\n", version)
-	*/
 }
 
 func main() {
