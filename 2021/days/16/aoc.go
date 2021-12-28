@@ -53,26 +53,27 @@ func (p *Packet) setVersion(text []rune) (int, []rune) {
 	return p.getVersion(), text[3:]
 }
 
-func getOp(typeID int) {
+func getOp(typeID int) (op string) {
 	switch typeID {
 	case 0:
-		fmt.Println("sum")
+		op = "sum"
 	case 1:
-		fmt.Println("product")
+		op = "product"
 	case 2:
-		fmt.Println("minimum")
+		op = "minimum"
 	case 3:
-		fmt.Println("maximum")
+		op = "maximum"
 	case 4:
-		fmt.Println("literal")
+		op = "literal"
 	case 5:
-		fmt.Println("greater than")
+		op = "greater than"
 	case 6:
-		fmt.Println("less than")
+		op = "less than"
 	case 7:
-		fmt.Println("equal to")
+		op = "equal to"
 	}
-
+	fmt.Println(op)
+	return op
 }
 
 func (p *Packet) setType(text []rune) (int, []rune) {
@@ -234,14 +235,151 @@ func (p *Packet) print() {
 	}
 }
 
-func part2(t Trans) {
-	for _, p := range t.Message {
-		p.print()
+func (p *Packet) makeStack(ops *[]string) {
+	if p.getType() != 4 {
+		*ops = append(*ops, getOp(p.getType()))
+	} else {
+		*ops = append(*ops, strconv.FormatInt(int64(getInt(p.Data)), 10))
+	}
+	for _, p := range p.SubPacket {
+		p.makeStack(ops)
 	}
 }
 
+type Stack []string
+type IntStack []int64
+
+func (s *Stack) isEmpty() bool {
+	return len(*s) == 0
+}
+
+func (is *IntStack) isEmpty() bool {
+	return len(*is) == 0
+}
+
+func (s *Stack) push(a string) {
+	*s = append(*s, a)
+}
+
+func (is *IntStack) push(a int64) {
+	*is = append(*is, a)
+}
+
+func (s *Stack) pop() (string, bool) {
+	var element string
+	if s.isEmpty() {
+		return "", false
+	} else {
+		element = (*s)[len(*s)-1]
+		*s = (*s)[:len(*s)-1]
+		return element, true
+	}
+}
+
+func (is *IntStack) pop() (int64, bool) {
+	var element int64
+	if is.isEmpty() {
+		return 0, false
+	} else {
+		element = (*is)[len(*is)-1]
+		*is = (*is)[:len(*is)-1]
+		return element, true
+	}
+}
+
+func processStack(s Stack) {
+	// Make a int stack to hold values
+	// have a temp accumulator
+	// When an operand is on top of the stack, pop the values and
+	// put the result in the acc
+	// then push the acc back onto the stack as a string
+	var val IntStack
+	var acc int64 = 0
+	for !s.isEmpty() {
+		temp, res := s.pop()
+		if res {
+			switch temp {
+			case "sum":
+				acc = 0
+				for !val.isEmpty() {
+					tmp, _ := val.pop()
+					acc += tmp
+				}
+				s.push(strconv.FormatInt(acc, 10))
+			case "product":
+				acc = 1
+				for !val.isEmpty() {
+					tmp, _ := val.pop()
+					acc *= tmp
+				}
+				s.push(strconv.FormatInt(acc, 10))
+			case "minimum":
+				acc = val[0]
+				for !val.isEmpty() {
+					tmp, _ := val.pop()
+					if acc > tmp {
+						acc = tmp
+					}
+				}
+				s.push(strconv.FormatInt(acc, 10))
+			case "maximum":
+				acc = val[0]
+				for !val.isEmpty() {
+					tmp, _ := val.pop()
+					if acc < tmp {
+						acc = tmp
+					}
+				}
+				s.push(strconv.FormatInt(acc, 10))
+			case "greater than":
+				t1, _ := val.pop()
+				t2, _ := val.pop()
+				if t1 > t2 {
+					acc = 1
+				} else {
+					acc = 0
+				}
+				s.push(strconv.FormatInt(acc, 10))
+			case "less than":
+				t1, _ := val.pop()
+				t2, _ := val.pop()
+				if t1 < t2 {
+					acc = 1
+				} else {
+					acc = 0
+				}
+				s.push(strconv.FormatInt(acc, 10))
+			case "equal to":
+				t1, _ := val.pop()
+				t2, _ := val.pop()
+				if t1 == t2 {
+					acc = 1
+				} else {
+					acc = 0
+				}
+				s.push(strconv.FormatInt(acc, 10))
+			default:
+				i, _ := strconv.ParseInt(temp, 10, 64)
+				val.push(i)
+			}
+		}
+	}
+	fmt.Println(val)
+
+}
+
+func part2(t Trans) {
+	var ops []string
+	for _, p := range t.Message {
+		p.makeStack(&ops)
+	}
+	fmt.Println(ops)
+	s := Stack(ops)
+	processStack(s)
+}
+
 func main() {
-	text := utils.ReadInput(0)
+	text := utils.ReadInput(1)
 	runes := []rune(text[0])
 	var out []string
 	for _, i := range runes {
