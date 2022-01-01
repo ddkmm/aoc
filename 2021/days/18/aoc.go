@@ -88,17 +88,6 @@ func processInput(text []string) (snails []Snail) {
 					fmt.Print(" ")
 					fmt.Println(&s)
 					snails = append(snails, *s)
-					if s.findDepth(2) != nil {
-						fmt.Println("Quick check:")
-						if s.sLeft != nil {
-							s.sLeft.sUp.print()
-							fmt.Println()
-						}
-						if s.sRight != nil {
-							s.sRight.sUp.print()
-							fmt.Println()
-						}
-					}
 				} else {
 					s2 := ss.pop()
 					fmt.Println(&s2)
@@ -180,158 +169,192 @@ func (s *Snail) addDepth() {
 	}
 }
 
-func (s *Snail) findDepth(depth int) *Snail {
+func (s *Snail) findDepth(depth int, ss *SnailStack) bool {
+	ret := false
+	ss.push(s)
 	if s.depth == depth {
-		return s
+		ret = true
 	}
-	var retSnail *Snail = nil
 	if s.sLeft != nil {
-		retSnail = s.sLeft.findDepth(depth)
+		ret = s.sLeft.findDepth(depth, ss)
+		if !ret {
+			ss.pop()
+		}
 	}
-	if retSnail == nil && s.sRight != nil {
-		retSnail = s.sRight.findDepth(depth)
+	if !ret && s.sRight != nil {
+		ret = s.sRight.findDepth(depth, ss)
+		if !ret {
+			ss.pop()
+		}
 	}
-	return retSnail
+	return ret
 }
 
-func add(s1 *Snail, s2 *Snail) *Snail {
-	s1.sUp.print()
-	s2.sUp.print()
-	s := &Snail{nil, s1, s2, -1, -1, 1}
-	s1.addDepth()
-	s2.addDepth()
-	fmt.Println(&(s1.sUp))
-	fmt.Println(&(s2.sUp))
-	s1.setUp(s)
-	s2.setUp(s)
-	s1.sUp.print()
+func add(s1 *Snail, s2 *Snail) (s3 *Snail) {
+	s3 = &Snail{nil, s1, s2, -1, -1, 1}
+	s1.setUp(s3)
+	s2.setUp(s3)
+	s3.sLeft.addDepth()
+	s3.sRight.addDepth()
+	s1.print()
+	fmt.Print(" + ")
+	s2.print()
+	fmt.Print(" = ")
+	s3.print()
 	fmt.Println()
-	s2.sUp.print()
-	fmt.Println()
-	s1.sUp = s
-	s1.sUp.print()
-	fmt.Println()
-	s2.sUp.print()
-	fmt.Println()
-	return s
+	return s3
 }
 
 func (s *Snail) reduce() {
-	s.explode()
-	s.split()
+	res := true
+	e := 0
+	sp := 0
+	for res {
+		s.print()
+		fmt.Println()
+		res = s.explode()
+		s.print()
+		fmt.Println()
+		if res {
+			e++
+		}
+		if !res {
+			res = s.split()
+			if res {
+				sp++
+			}
+		}
+		fmt.Printf("%d explodes, %d splits\n", e, sp)
+	}
 }
 
-func (s *Snail) split() {
+func (s *Snail) split() (res bool) {
+	res = false
 	if s.sLeft == nil && s.vLeft > 9 {
 		temp := float64(s.vLeft) / 2
 		newSnail := Snail{s, nil, nil, int(math.Floor(temp)), int(math.Ceil(temp)), s.depth + 1}
 		s.sLeft = &newSnail
+		res = true
 	} else if s.sRight == nil && s.vRight > 9 {
 		temp := float64(s.vLeft) / 2
 		newSnail := Snail{s, nil, nil, int(math.Floor(temp)), int(math.Ceil(temp)), s.depth + 1}
 		s.sRight = &newSnail
-	}
-}
-
-/*
-func (s *Snail) findLeft() (leftSnail *Snail) {
-	if s.sUp == nil {
-		leftSnail = nil
-	} else if s.sUp.sLeft != nil && s.sUp.sLeft != s {
-		leftSnail = s.sUp.sLeft
-	} else {
-		leftSnail = s.sUp.findLeft()
+		res = true
 	}
 	return
 }
-*/
 
-func (s *Snail) findLeft(ss *SnailStack) {
-	fmt.Printf("Find left for ")
-	s.print()
-	fmt.Printf(" at depth %d\n", s.depth)
-	fmt.Println(s)
-
-	if s.getUp() == nil {
+func (s *Snail) find(dir string, ss *SnailStack) (retSnail *Snail) {
+	if ss.len() == 0 {
 		s.print()
 		fmt.Println(" has no parents")
 		fmt.Println(s)
-		return
-	}
-	fmt.Printf("Parent is ")
-	s.sUp.print()
-	fmt.Print(" ")
-	fmt.Println(s.sUp)
-	if s.sUp.sLeft != nil && s.sUp.sLeft != s {
-		s.sUp.sLeft.print()
-		fmt.Println(" found")
-		ss.push(s.getUp().sLeft)
+		retSnail = nil
 	} else {
-		fmt.Printf("Not found yet. Now find from ")
-		s.sUp.print()
-		fmt.Println()
-		fmt.Println(s.sUp)
-		s.getUp().findLeft(ss)
+		snail := ss.pop()
+		if dir == "left" {
+			if snail.sLeft != nil && snail.sLeft != s {
+				//ss.push(snail.sLeft)
+				retSnail = snail.sLeft
+			} else if snail.sLeft == nil && snail.sRight == s {
+				//ss.push(snail)
+				retSnail = snail
+			} else if retSnail == nil {
+				return snail.find(dir, ss)
+			}
+		} else if dir == "right" {
+			if snail.sRight != nil && snail.sRight != s {
+				//ss.push(snail.sRight)
+				retSnail = snail.sRight
+			} else if snail.sRight == nil && snail.sLeft == s {
+				//ss.push(snail)
+				retSnail = snail
+			} else if retSnail == nil {
+				return snail.find(dir, ss)
+			}
+		}
 	}
+	return
 }
 
-func (s *Snail) findRight(ss *SnailStack) {
-	if s.sUp == nil {
-		return
-	}
-	if s.sUp.sRight != nil {
-		ss.push(s.sUp.sRight)
-	} else {
-		s.sUp.findRight(ss)
-	}
-}
-
-func (s *Snail) explode() {
+func (s *Snail) explode() (res bool) {
 	var ss SnailStack
 	// Find the first snail with depth 5
-	exploder := s.findDepth(3)
-	if exploder != nil {
+	if s.findDepth(5, &ss) {
+		fmt.Printf("** Exploding ")
+		s.print()
+		fmt.Println()
+		/*
+			for i := ss.len(); i > 0; i-- {
+				fmt.Printf("Depth %d: ", ss.Stack[i-1].depth)
+				fmt.Println(ss.Stack[i-1])
+			}
+		*/
+		leftStack := ss
+		rightStack := ss
+		exploder := leftStack.pop()
 		s.print()
 		fmt.Printf(" has snail ")
 		exploder.print()
 		fmt.Printf(" at depth %d\n", exploder.depth)
-		exploder.findLeft(&ss)
-		newS := ss.pop()
+		newS := exploder.find("left", &leftStack)
 		if newS != nil {
 			fmt.Printf("Left snail: ")
-			fmt.Println()
 			newS.print()
+			fmt.Println()
+			if newS.sRight == exploder {
+				newS.vLeft += exploder.vLeft
+				newS.vRight = 0
+				newS.sRight = nil
+				exploder = nil
+			} else {
+				newS.vRight += exploder.vLeft
+			}
 		} else {
 			fmt.Printf("No snail on the left\n")
 		}
-		exploder.findRight(&ss)
-		newS = ss.pop()
+		exploder = rightStack.pop()
+		newS = exploder.find("right", &rightStack)
 		if newS != nil {
 			fmt.Printf("Right snail: ")
 			newS.print()
 			fmt.Println()
+			if newS.sLeft == exploder {
+				newS.vRight += exploder.vRight
+				newS.vLeft = 0
+				newS.sLeft = nil
+				exploder = nil
+			} else {
+				newS.vLeft += exploder.vRight
+			}
 		} else {
 			fmt.Printf("No snail on the right\n")
 		}
+		res = true
+	} else {
+		res = false
 	}
+	return
 }
 
 func work(snails []Snail) (sum Snail) {
+	tmpSum := &snails[0]
+	for i := 0; i < len(snails)-2; i++ {
+		tmpSum = add(tmpSum, &snails[i+1])
+		tmpSum.reduce()
+		tmpSum.print()
+		fmt.Println()
+	}
+	tmpSum.print()
+	fmt.Println()
+
 	fmt.Printf("Add ")
 	snails[0].print()
 	fmt.Printf(" and ")
 	snails[1].print()
 	fmt.Println()
 	snail := add(&snails[0], &snails[1])
-	snail.print()
-	fmt.Println("\nExplode")
-	snail.explode()
-	fmt.Printf("Now try again with ")
-	fmt.Println(snails[2])
-	snails[2].explode()
-	fmt.Println("\nSplit")
-	snail.split()
-	snail.print()
+	snail.reduce()
 	return
 }
 
