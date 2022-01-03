@@ -498,7 +498,7 @@ func (s *Snail) explode_new(ss SnailStack) {
 		// We are the left side, so the near neighbor is the right side
 		// and the near neighbor must be a value?
 		if rightSnail == exploder.getUp() {
-			rightSnail.vLeft += exploder.vRight
+			rightSnail.vRight += exploder.vRight
 
 		} else if rightSnail != nil {
 			rightSnail.vLeft += exploder.vRight
@@ -611,7 +611,6 @@ func (s *Snail) explode() (res bool) {
 }
 
 func work(snails []Snail) (sum *Snail) {
-	snails[0].reduce()
 	sum = &snails[0]
 	for i := 0; i < len(snails)-1; i++ {
 		sum = add(sum, &snails[i+1])
