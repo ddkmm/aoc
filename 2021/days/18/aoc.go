@@ -225,17 +225,18 @@ func (s *Snail) findSplit(ss *SnailStack) bool {
 	ss.push(s)
 	if s.vLeft > 9 || s.vRight > 9 {
 		ret = true
-	}
-	if s.sLeft != nil {
-		ret = s.sLeft.findSplit(ss)
-		if !ret {
-			ss.pop()
+	} else {
+		if s.sLeft != nil {
+			ret = s.sLeft.findSplit(ss)
+			if !ret {
+				ss.pop()
+			}
 		}
-	}
-	if !ret && s.sRight != nil {
-		ret = s.sRight.findSplit(ss)
-		if !ret {
-			ss.pop()
+		if !ret && s.sRight != nil {
+			ret = s.sRight.findSplit(ss)
+			if !ret {
+				ss.pop()
+			}
 		}
 	}
 	return ret
@@ -275,6 +276,19 @@ func (s *Snail) reduce() {
 		s.print()
 		fmt.Println()
 		fmt.Printf("%d explodes, %d splits\n", e, sp)
+		if e+sp > 300 {
+			fmt.Println("ERROR")
+			fmt.Println("ERROR")
+			fmt.Println("ERROR")
+			fmt.Println("ERROR")
+			fmt.Println("ERROR")
+			fmt.Println("ERROR")
+			fmt.Println("ERROR")
+			fmt.Println("ERROR")
+			fmt.Println("ERROR")
+			fmt.Println("ERROR")
+			res = false
+		}
 	}
 }
 
@@ -447,6 +461,22 @@ func (s *Snail) explode_old(ss SnailStack) {
 	}
 }
 
+func (s *Snail) getMostLeft() *Snail {
+	if s.sLeft == nil {
+		return s
+	} else {
+		return s.sLeft.getMostLeft()
+	}
+}
+
+func (s *Snail) getMostRight() *Snail {
+	if s.sRight == nil {
+		return s
+	} else {
+		return s.sRight.getMostRight()
+	}
+}
+
 func (s *Snail) explode_new(ss SnailStack) {
 	// Top of the stack has the snail at the lowest depth
 	// s is the 'root' snail
@@ -539,25 +569,34 @@ func (s *Snail) explode_new(ss SnailStack) {
 		// And we want the right most value of it
 		if leftSnail == nil {
 			fmt.Println("Empty neighbor")
-		} else if leftSnail.sRight == nil && leftSnail.vRight != -1 {
-			// Case 1, right side is just a value
-			leftSnail.vRight += exploder.vLeft
-		} else if leftSnail.sRight != nil {
-			// Case 2, right side is another snail
-			// Get right value of right side
-			if leftSnail.sRight.sRight == nil {
-				if leftSnail.sRight.vRight != -1 {
-					leftSnail.sRight.vRight += exploder.vLeft
-				}
-			} else if leftSnail.sLeft == nil {
+		} else {
+			if leftSnail.sRight != nil && leftSnail.sRight.getMostLeft() == exploder {
 				leftSnail.vLeft += exploder.vLeft
 			} else {
-				fmt.Println("Case 2 error")
+				leftSnail.getMostRight().vRight += exploder.vLeft
 			}
+			/*
+				if leftSnail.sRight == nil && leftSnail.vRight != -1 {
+					// Case 1, right side is just a value
+					leftSnail.vRight += exploder.vLeft
+				} else if leftSnail.sRight != nil {
+					// Case 2, right side is another snail
+					// Get right value of right side
+					if leftSnail.sRight.sRight == nil {
+						if leftSnail.sRight.vRight != -1 {
+							leftSnail.sRight.vRight += exploder.vLeft
+						}
+					} else if leftSnail.sLeft == nil {
+						leftSnail.vLeft += exploder.vLeft
+					} else {
+						fmt.Println("Case 2 error")
+					}
+				}
+			*/
+			fmt.Print(" = ")
+			leftSnail.print()
+			fmt.Println()
 		}
-		fmt.Print(" = ")
-		leftSnail.print()
-		fmt.Println()
 	} else {
 		fmt.Printf("%d + ", exploder.vRight)
 		rightSnail.print()
@@ -565,24 +604,33 @@ func (s *Snail) explode_new(ss SnailStack) {
 		// And we want to add to the left most value
 		if rightSnail == nil {
 			fmt.Println("Empty neighbor")
-		} else if rightSnail.sLeft == nil && rightSnail.vLeft != -1 {
-			rightSnail.vLeft += exploder.vRight
-		} else if rightSnail.sLeft != nil {
-			// Case 2, left side is another snail
-			// Get left value of left side
-			if rightSnail.sLeft.sLeft == nil {
-				if rightSnail.sLeft.vLeft != -1 {
-					rightSnail.sLeft.vLeft += exploder.vRight
-				}
-			} else if rightSnail.sRight == nil {
+		} else {
+			if rightSnail.sLeft != nil && rightSnail.sLeft.getMostRight() == exploder {
 				rightSnail.vRight += exploder.vRight
 			} else {
-				fmt.Println("Case 2 error")
+				rightSnail.getMostLeft().vLeft += exploder.vRight
 			}
+			/*
+				if rightSnail.sLeft == nil && rightSnail.vLeft != -1 {
+					rightSnail.vLeft += exploder.vRight
+				} else if rightSnail.sLeft != nil {
+					// Case 2, left side is another snail
+					// Get left value of left side
+					if rightSnail.sLeft.sLeft == nil {
+						if rightSnail.sLeft.vLeft != -1 {
+							rightSnail.sLeft.vLeft += exploder.vRight
+						}
+					} else if rightSnail.sRight == nil {
+						rightSnail.vRight += exploder.vRight
+					} else {
+						fmt.Println("Case 2 error")
+					}
+				}
+			*/
+			fmt.Print(" = ")
+			rightSnail.print()
+			fmt.Println()
 		}
-		fmt.Print(" = ")
-		rightSnail.print()
-		fmt.Println()
 	}
 
 	/*
