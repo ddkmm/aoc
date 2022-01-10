@@ -117,7 +117,7 @@ func (s *Snail) findDepth(depth int, ss *SnailStack) bool {
 func (s *Snail) findSplit(ss *SnailStack) bool {
 	ret := false
 	ss.push(s)
-	if s.vLeft > 9 || s.vRight > 9 {
+	if s.vLeft > 9 { //|| s.vRight > 9 {
 		ret = true
 	} else {
 		if s.sLeft != nil {
@@ -126,6 +126,10 @@ func (s *Snail) findSplit(ss *SnailStack) bool {
 				ss.pop()
 			}
 		}
+	}
+	if s.vRight > 9 {
+		ret = true
+	} else {
 		if !ret && s.sRight != nil {
 			ret = s.sRight.findSplit(ss)
 			if !ret {

@@ -63,7 +63,6 @@ func add(s1 *Snail, s2 *Snail) (s3 *Snail) {
 }
 
 func work(snails []Snail) (sum *Snail) {
-	snails[0].reduce()
 	sum = &snails[0]
 	for i := 0; i < len(snails)-1; i++ {
 		sum = add(sum, &snails[i+1])
@@ -74,6 +73,35 @@ func work(snails []Snail) (sum *Snail) {
 	fmt.Println()
 
 	return
+}
+
+func test() {
+	/*
+	   [[[[7,7],[7,8]],[[9,5],[8,0]]],[[[9,10],20],[8,[9,0]]]]
+	*/
+
+	snail1 := Snail{nil, nil, nil, 7, 7}
+	snail2 := Snail{nil, nil, nil, 7, 8}
+	snail3 := Snail{nil, &snail1, &snail2, -1, -1}
+
+	snail4 := Snail{nil, nil, nil, 9, 5}
+	snail5 := Snail{nil, nil, nil, 8, 0}
+	snail6 := Snail{nil, &snail4, &snail5, -1, -1}
+
+	snailL := Snail{nil, &snail3, &snail6, -1, -1}
+	snail8 := Snail{nil, nil, nil, 9, 10}
+	snail8b := Snail{nil, &snail8, nil, -1, 20}
+	snail10 := Snail{nil, nil, nil, 9, 0}
+	snail11 := Snail{nil, nil, &snail10, 8, -1}
+
+	snailR := Snail{nil, &snail8b, &snail11, -1, -1}
+	snail := Snail{nil, &snailL, &snailR, -1, -1}
+	snail.print()
+	fmt.Println()
+	snail.reduce()
+	snail.print()
+	fmt.Println()
+
 }
 
 func part1(text []string) {
@@ -90,6 +118,7 @@ func part1(text []string) {
 }
 
 func main() {
-	text := utils.ReadInput(0)
+	text := utils.ReadInput(1)
+	//	test()
 	part1(text)
 }
