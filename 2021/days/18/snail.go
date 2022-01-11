@@ -159,19 +159,6 @@ func (s *Snail) reduce() {
 		s.print()
 		fmt.Println()
 		fmt.Printf("%d explodes, %d splits\n", e, sp)
-		if e+sp > 300 {
-			fmt.Println("ERROR")
-			fmt.Println("ERROR")
-			fmt.Println("ERROR")
-			fmt.Println("ERROR")
-			fmt.Println("ERROR")
-			fmt.Println("ERROR")
-			fmt.Println("ERROR")
-			fmt.Println("ERROR")
-			fmt.Println("ERROR")
-			fmt.Println("ERROR")
-			res = false
-		}
 	}
 }
 

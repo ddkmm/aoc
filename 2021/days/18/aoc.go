@@ -56,7 +56,7 @@ func add(s1 *Snail, s2 *Snail) (s3 *Snail) {
 	s1.print()
 	fmt.Print(" + ")
 	s2.print()
-	fmt.Print(" = ")
+	fmt.Println(" = ")
 	s3.print()
 	fmt.Println()
 	return s3
@@ -66,7 +66,6 @@ func work(snails []Snail) (sum *Snail) {
 	sum = &snails[0]
 	for i := 0; i < len(snails)-1; i++ {
 		sum = add(sum, &snails[i+1])
-		sum.print()
 		sum.reduce()
 	}
 	sum.print()
