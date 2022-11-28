@@ -44,7 +44,10 @@ func (graph *Graph) getNeighbours(v Vertex) []Vertex {
 
 func part1(grid [][]int) {
 	defer utils.TimeTrack(time.Now(), "Part 1")
-	fmt.Printf("Part 1 answer %d\n", dijkstra(grid))
+	start := Vertex{0, 0}
+	dest := Vertex{len(grid[0]) - 1, len(grid) - 1}
+	fmt.Printf("Part 1a answer %d\n", dijkstra(grid, start, dest))
+	fmt.Printf("Part 1b answer %d\n", dijkstra(grid, dest, start))
 }
 
 func grow(grid [][]int) [][]int {
@@ -81,39 +84,53 @@ func grow(grid [][]int) [][]int {
 }
 
 func part2(grid [][]int) {
-	defer utils.TimeTrack(time.Now(), "Part 1")
+	defer utils.TimeTrack(time.Now(), "Part 2")
 	bigGrid := grow(grid)
-	fmt.Printf("Part 2 answer %d\n", dijkstra(bigGrid))
+	start := Vertex{0, 0}
+	dest := Vertex{len(bigGrid[0]) - 1, len(bigGrid) - 1}
+	// Part 2 answer 3018
+	// 2021/12/18 00:41:06 Part 2 took 49m59.607356208s
+	// fmt.Printf("Part 2a answer %d\n", dijkstra(bigGrid, start, dest))
+	/*
+		a is forwards, b is backwards. This was a compiled run in terminal
+		   	Part 1a answer 712
+		   	Part 1b answer 720
+		    2021/12/18 07:06:39 Part 1 took 4.479031s
+		    Part 2b answer 3025
+		    2021/12/18 07:37:03 Part 2 took 30m24.327768667s
+	*/
+	fmt.Printf("Part 2b answer %d\n", dijkstra(bigGrid, dest, start))
+
 }
 
-func dijkstra(grid [][]int) int {
+func dijkstra(grid [][]int, start Vertex, dest Vertex) int {
 	Q := make(map[Vertex]bool)
 	dist := make(map[Vertex]int)
 	prev := make(map[Vertex]*Vertex)
 	g := Graph{grid}
-	start := Vertex{0, 0}
-	dest := Vertex{len(g.grid[0]) - 1, len(g.grid) - 1}
 	score := 0
 
 	// Setup
 	for y := 0; y < len(g.grid); y++ {
 		for x := 0; x < len(g.grid[0]); x++ {
 			Q[Vertex{x, y}] = true
-			dist[Vertex{x, y}] = 999
-			prev[Vertex{x, y}] = nil
+			dist[Vertex{x, y}] = 999999
+			//			prev[Vertex{x, y}] = nil
 		}
 	}
 	dist[start] = 0
 
 	for len(Q) != 0 {
+		//		fmt.Printf("Length of Q is %d\n", len(Q))
 		var minVertex Vertex
-		min := 999
+		min := 999999
 		for k, _ := range Q {
 			if dist[k] < min {
 				min = dist[k]
 				minVertex = k
 			}
 		}
+		//		fmt.Printf("New minVertex is ")
 		//fmt.Println(minVertex)
 		delete(Q, minVertex)
 		if minVertex == dest {
@@ -133,6 +150,7 @@ func dijkstra(grid [][]int) int {
 					fmt.Println(g.getValue(path[s]))
 				}
 			*/
+			//	fmt.Println(len(path))
 			break
 
 		}
@@ -140,7 +158,10 @@ func dijkstra(grid [][]int) int {
 		for _, n := range neighbours {
 			if Q[n] {
 				alt := dist[minVertex] + g.getValue(n)
+				//			fmt.Printf("%d ? %d\n", alt, dist[n])
 				if alt < dist[n] {
+					//					fmt.Printf("%d before, %d after\n", dist[n], alt)
+
 					dist[n] = alt
 					prev[n] = &minVertex
 				}

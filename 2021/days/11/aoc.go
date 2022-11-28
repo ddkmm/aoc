@@ -191,16 +191,16 @@ func main() {
 	text := utils.ReadInput(1)
 	var numbers []int
 	var grid [][]int
+	var grid2 [][]int
 	for _, line := range text {
 		for _, digit := range line {
 			number, _ := strconv.Atoi(string(digit))
 			numbers = append(numbers, number)
 		}
 		grid = append(grid, numbers)
+		grid2 = append(grid, numbers)
 		numbers = nil
 	}
-	//fmt.Print("At the beginning\n")
-	//printGrid(grid)
-	part1(grid, 500)
-	//part2(grid)
+	//part1(grid, 100)
+	part2(grid2)
 }

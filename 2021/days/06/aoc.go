@@ -46,7 +46,7 @@ func spawn(fish [9]int, days int) {
 
 func main() {
 
-	text := utils.ReadInput()
+	text := utils.ReadInput(1)
 	fish := createFish(text)
 	spawn(fish, 256)
 

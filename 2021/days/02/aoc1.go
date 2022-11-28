@@ -9,7 +9,6 @@ import (
 )
 
 func main() {
-	fmt.Printf("Hello world\n")
 	file, _ := os.Open("./input.txt")
 	scanner := bufio.NewScanner(file)
 	scanner.Split(bufio.ScanLines)

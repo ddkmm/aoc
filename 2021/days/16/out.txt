@@ -1,0 +1,1560 @@
+1100001000001101010110011000000000101101001010110000101101100111000100111100011010110100110100010110000000001010110011100111111000111100000101111001101111111110001110010001111001010100011011001100000000010111111100000000010010100100111101010001001111001001110110010111001110100001101100101111001100101100001100000000010011100110111110010101010001101101000000000101100001000000000110001000110001010001110110100010100110001000000000111111000110000110001111000100001000010110000000000110100011100101111000110111011101011001101111000100100100001000110000000001000010011110011101101011000000000100001001011110001011000101001100001101111001000000001000110011110010101001110111101000000000100010001000000000111011000110000110001011000100001101110000000000000100001001100011101111000010100110001110010001000000000001000011010011100001000011001101010000110001101101100110100010010100101000000001011101001011010111110101111011101011100001001001010111111111011001010110100110111010010010100000100001010010110110011011011011111001101001000111100000111010010000000001011111011111000000000010111100010010111101001000101101011100110011101100000011100110011001011110011101101001111110001101001010011010000101000010000000001010000000100110100001111110011100010010101001010001111011100100010101011110011100000001100011000000000101101100000000000111001111100101011011011101110101000001001000100101101010100010000100111101110011110101111110101110111001000000000110010000010100000000001110011111001101111111010101011001010111001111101001010000011110011001111110101010111100011000000000101101001100000000010100110010000010100110000000001011010100000000001011110011001001111110100011101000110011100110110001110010011010011001110001000000000101111000110101010001110111001000000000101000001010010101010001111010000000000101010101100100011111100100111100100011111100100111100100110100011000100000000001100001101001001001000010100110110000111110010011000001100011000000000111000001000000000110111000101010010000011001100011000100000000000000100001001100010011111000011100010001111001000000000000010000101010001010110100011011001000010000000110000000001010010110000000001000010011011010000001001101101000011100100110110111101010000000001000110011101101101011011000110111010101101001100001100000011000000000010100011000000000011100001000000000011100111000000000011010000000000101000110000000100000000001011010000000010001111011001010000000000110100110000000000111000010000000000111000110000000000100001100000000110000001000110000000010101010001011000000001001010011100000000000011111100010110000000001101000010000000000000101001010101100000000001111001000010000000000100110101011000000000001000001010010010010111101001010110111101111111011110111001100110111101010101111001000000000001110101011001101100000101100100011101100110011100110001111000000001001000000000101000100010011101100100101111111010000000001001110010110100011001000110110100111000000011010001100011100101011000011001000101010101000000001001111000010101110011111100011011001010001100111110110001010010110110101110110010100001001110111100111000011011000110000101000000000010001001101001111100001000000000101010101011000000000001101001001001100011100100000000100010011000111001000000001111100000010101000101010000110000000001001011000000000010000110101001101010011100011010001111101100100101010111101101011001101011011100100111110011010111001110101111101000000000001001110110100110000000001110110000110000100011001011000001110100110000000001111110000111110100010000101000101001100100000000001000011011000001000110001000010100001001100010000000001011011001110100000000010111100101001100010001101100001110010010100110001000110110000110101000100001101110000000010101010011110101001101000111001100111101111110100110011110011010101000010000010010010000100001001110010101111001001111001100111110010011000010011001111011000111001101001001101011000000000101111011110011110011110101001000110001010110101001101110010100001110001000101100110101010110011001111100000000000010110100000100101010101111110010110110111010010100000110001001001111000100101101010101100111001110110110100000111010011100111110001011010011011111101010111001110011010010111110111000001100101011100000000011001100100111101110011111100000111010010101000000011001010111010101001011100100001001100000000010010101100000000010011000000000000010000100110001111110100011111111000101101000000000000001000011011000010000010000110100100010100111001011100110101000000000000011111110110011011110000001000010010100100011110100011100100101110001001110000010001100011111110010000000001100000001111100000000010100100110101110011000001001011001101011100110000010010010010110101011110001010110001100000000010010100001111011101000000000101111001000110110001100011001100111110111011110011011000000110000000000001111100101100001000101001100110010011000111001101110011110011101110111110011111110100000101101001110011101110011000110101111000100100100100000000100100000001011000000000101110000000000000100001010100011110001000101110010001101111000000000000010000101010000110000100001001001000010010010011000010000110011000000000100011110000000001100110001000100000000011011100010010001000101111110000111110000100000000011001100010101101000101101110001101101100100011011011000000111100001000000000010111001011011101000111000011000000001000001000001011110011010001111101001100001001001100100010101010101100000000000101011111001100111101001010000000
+Packet 1, total version 6
+Type 0: sum
+Sub packet 1 of 53
+Packet 2, total version 9
+Type 1: product
+Sub packet 1 of 2
+Packet 3, total version 15
+Type 4: literal
+	Data value is 345367612077
+Sub packet 2 of 2
+Packet 4, total version 15
+Type 5: greater than
+Sub packet 1 of 2
+Packet 5, total version 20
+Type 4: literal
+	Data value is 848322
+Sub packet 2 of 2
+Packet 6, total version 27
+Type 4: literal
+	Data value is 3213630547
+Sub packet 3 of 2
+Packet 7, total version 30
+Type 1: product
+Sub packet 1 of 2
+Packet 8, total version 37
+Type 7: equal to
+Sub packet 1 of 2
+Packet 9, total version 39
+Type 4: literal
+	Data value is 14871
+Sub packet 2 of 2
+Packet 10, total version 43
+Type 4: literal
+	Data value is 863441
+Sub packet 3 of 2
+Packet 11, total version 48
+Type 4: literal
+	Data value is 1845
+Sub packet 4 of 2
+Packet 12, total version 52
+Type 1: product
+Sub packet 1 of 2
+Packet 13, total version 55
+Type 4: literal
+	Data value is 48216
+Sub packet 2 of 2
+Packet 14, total version 61
+Type 6: less than
+Sub packet 1 of 2
+Packet 15, total version 67
+Type 0: sum
+Sub packet 1 of 3
+Packet 16, total version 67
+Type 4: literal
+	Data value is 12
+Sub packet 2 of 3
+Packet 17, total version 69
+Type 4: literal
+	Data value is 14
+Sub packet 3 of 3
+Packet 18, total version 75
+Type 4: literal
+	Data value is 10
+Sub packet 4 of 3
+Packet 19, total version 78
+Type 0: sum
+Sub packet 1 of 3
+Packet 20, total version 85
+Type 4: literal
+	Data value is 12
+Sub packet 2 of 3
+Packet 21, total version 86
+Type 4: literal
+	Data value is 15
+Sub packet 3 of 3
+Packet 22, total version 86
+Type 4: literal
+	Data value is 4
+Sub packet 4 of 3
+Packet 23, total version 87
+Type 3: maximum
+Sub packet 1
+Packet 24, total version 90
+Type 4: literal
+	Data value is 29054
+Sub packet 8
+Packet 25, total version 95
+Type 4: literal
+	Data value is 47144
+Sub packet 15
+Packet 26, total version 97
+Type 1: product
+Sub packet 1 of 2
+Packet 27, total version 97
+Type 4: literal
+	Data value is 238
+Sub packet 2 of 2
+Packet 28, total version 103
+Type 5: greater than
+Sub packet 1 of 2
+Packet 29, total version 103
+Type 4: literal
+	Data value is 1820
+Sub packet 2 of 2
+Packet 30, total version 105
+Type 4: literal
+	Data value is 141
+Sub packet 3 of 2
+Packet 31, total version 112
+Type 1: product
+Sub packet 1
+Packet 32, total version 119
+Type 4: literal
+	Data value is 87
+Sub packet 8
+Packet 33, total version 122
+Type 6: less than
+Sub packet 1 of 2
+Packet 34, total version 123
+Type 0: sum
+Sub packet 1 of 3
+Packet 35, total version 128
+Type 4: literal
+	Data value is 12
+Sub packet 2 of 3
+Packet 36, total version 129
+Type 4: literal
+	Data value is 11
+Sub packet 3 of 3
+Packet 37, total version 129
+Type 4: literal
+	Data value is 6
+Sub packet 4 of 3
+Packet 38, total version 136
+Type 0: sum
+Sub packet 1
+Packet 39, total version 137
+Type 4: literal
+	Data value is 14
+Sub packet 8
+Packet 40, total version 144
+Type 4: literal
+	Data value is 5
+Sub packet 15
+Packet 41, total version 145
+Type 4: literal
+	Data value is 14
+Sub packet 22
+Packet 42, total version 147
+Type 1: product
+Sub packet 1
+Packet 43, total version 153
+Type 4: literal
+	Data value is 196
+Sub packet 8
+Packet 44, total version 154
+Type 4: literal
+	Data value is 657596
+Sub packet 15
+Packet 45, total version 160
+Type 4: literal
+	Data value is 9
+Sub packet 22
+Packet 46, total version 162
+Type 2: minimum
+Sub packet 1 of 5
+Packet 47, total version 168
+Type 4: literal
+	Data value is 6794974
+Sub packet 2 of 5
+Packet 48, total version 168
+Type 4: literal
+	Data value is 163690
+Sub packet 3 of 5
+Packet 49, total version 174
+Type 4: literal
+	Data value is 737800
+Sub packet 4 of 5
+Packet 50, total version 176
+Type 4: literal
+	Data value is 110541992
+Sub packet 5 of 5
+Packet 51, total version 183
+Type 4: literal
+	Data value is 3
+Sub packet 6 of 5
+Packet 52, total version 188
+Type 1: product
+Sub packet 1
+Packet 53, total version 191
+Type 7: equal to
+Sub packet 1
+Packet 54, total version 191
+Type 4: literal
+	Data value is 29725
+Sub packet 8
+Packet 55, total version 194
+Type 4: literal
+	Data value is 2480
+Sub packet 15
+Packet 56, total version 197
+Type 4: literal
+	Data value is 37614
+Sub packet 22
+Packet 57, total version 203
+Type 4: literal
+	Data value is 15811746
+Sub packet 29
+Packet 58, total version 207
+Type 1: product
+Sub packet 1
+Packet 59, total version 207
+Type 4: literal
+	Data value is 163
+Sub packet 8
+Packet 60, total version 214
+Type 4: literal
+	Data value is 201
+Sub packet 15
+Packet 61, total version 216
+Type 4: literal
+	Data value is 79
+Sub packet 22
+Packet 62, total version 219
+Type 4: literal
+	Data value is 26
+Sub packet 29
+Packet 63, total version 226
+Type 4: literal
+	Data value is 192
+Sub packet 36
+Packet 64, total version 232
+Type 1: product
+Sub packet 1 of 2
+Packet 65, total version 238
+Type 6: less than
+Sub packet 1
+Packet 66, total version 245
+Type 4: literal
+	Data value is 5691913
+Sub packet 8
+Packet 67, total version 245
+Type 4: literal
+	Data value is 1618
+Sub packet 15
+Packet 68, total version 245
+Type 4: literal
+	Data value is 15525854
+Sub packet 22
+Packet 69, total version 252
+Type 1: product
+Sub packet 1
+Packet 70, total version 252
+Type 5: greater than
+Sub packet 1
+Packet 71, total version 259
+Type 4: literal
+	Data value is 3066
+Sub packet 8
+Packet 72, total version 264
+Type 4: literal
+	Data value is 5890575
+Sub packet 15
+Packet 73, total version 265
+Type 4: literal
+	Data value is 3931
+Sub packet 22
+Packet 74, total version 271
+Type 1: product
+Sub packet 1 of 2
+Packet 75, total version 277
+Type 4: literal
+	Data value is 128
+Sub packet 2 of 2
+Packet 76, total version 279
+Type 4: literal
+	Data value is 144
+Sub packet 3 of 2
+Packet 77, total version 284
+Type 1: product
+Sub packet 1 of 2
+Packet 78, total version 290
+Type 5: greater than
+Sub packet 1
+Packet 79, total version 291
+Type 4: literal
+	Data value is 254374
+Sub packet 8
+Packet 80, total version 294
+Type 4: literal
+	Data value is 179
+Sub packet 15
+Packet 81, total version 298
+Type 4: literal
+	Data value is 172
+Sub packet 22
+Packet 82, total version 305
+Type 0: sum
+Sub packet 1 of 2
+Packet 83, total version 312
+Type 4: literal
+	Data value is 13
+Sub packet 2 of 2
+Packet 84, total version 314
+Type 4: literal
+	Data value is 14
+Sub packet 3 of 2
+Packet 85, total version 321
+Type 1: product
+Sub packet 1
+Packet 86, total version 323
+Type 4: literal
+	Data value is 88
+Sub packet 8
+Packet 87, total version 330
+Type 5: greater than
+Sub packet 1
+Packet 88, total version 335
+Type 4: literal
+	Data value is 500
+Sub packet 8
+Packet 89, total version 342
+Type 4: literal
+	Data value is 500
+Sub packet 15
+Packet 90, total version 349
+Type 4: literal
+	Data value is 56
+Sub packet 22
+Packet 91, total version 355
+Type 1: product
+Sub packet 1
+Packet 92, total version 361
+Type 4: literal
+	Data value is 40
+Sub packet 8
+Packet 93, total version 363
+Type 4: literal
+	Data value is 177
+Sub packet 15
+Packet 94, total version 370
+Type 4: literal
+	Data value is 48
+Sub packet 22
+Packet 95, total version 376
+Type 1: product
+Sub packet 1 of 3
+Packet 96, total version 380
+Type 0: sum
+Sub packet 1 of 3
+Packet 97, total version 383
+Type 4: literal
+	Data value is 10
+Sub packet 2 of 3
+Packet 98, total version 387
+Type 4: literal
+	Data value is 3
+Sub packet 3 of 3
+Packet 99, total version 388
+Type 4: literal
+	Data value is 12
+Sub packet 4 of 3
+Packet 100, total version 390
+Type 0: sum
+Sub packet 1
+Packet 101, total version 391
+Type 4: literal
+	Data value is 9
+Sub packet 8
+Packet 102, total version 398
+Type 4: literal
+	Data value is 7
+Sub packet 15
+Packet 103, total version 398
+Type 4: literal
+	Data value is 15
+Sub packet 22
+Packet 104, total version 399
+Type 0: sum
+Sub packet 1
+Packet 105, total version 401
+Type 4: literal
+	Data value is 10
+Sub packet 8
+Packet 106, total version 407
+Type 4: literal
+	Data value is 13
+Sub packet 15
+Packet 107, total version 411
+Type 4: literal
+	Data value is 4
+Sub packet 22
+Packet 108, total version 411
+Type 1: product
+Sub packet 1 of 2
+Packet 109, total version 415
+Type 5: greater than
+Sub packet 1 of 2
+Packet 110, total version 415
+Type 4: literal
+	Data value is 184
+Sub packet 2 of 2
+Packet 111, total version 415
+Type 4: literal
+	Data value is 184
+Sub packet 3 of 2
+Packet 112, total version 418
+Type 4: literal
+	Data value is 61
+Sub packet 4 of 2
+Packet 113, total version 425
+Type 2: minimum
+Sub packet 1 of 2
+Packet 114, total version 426
+Type 4: literal
+	Data value is 224824157
+Sub packet 2 of 2
+Packet 115, total version 427
+Type 4: literal
+	Data value is 6
+Sub packet 3 of 2
+Packet 116, total version 427
+Type 1: product
+Sub packet 1 of 1
+Packet 117, total version 429
+Type 1: product
+Sub packet 1 of 1
+Packet 118, total version 435
+Type 0: sum
+Sub packet 1 of 1
+Packet 119, total version 441
+Type 3: maximum
+Sub packet 1 of 1
+Packet 120, total version 446
+Type 0: sum
+Sub packet 1
+Packet 121, total version 446
+Type 0: sum
+Sub packet 1 of 1
+Packet 122, total version 449
+Type 2: minimum
+Sub packet 1
+Packet 123, total version 455
+Type 2: minimum
+Sub packet 1 of 1
+Packet 124, total version 460
+Type 1: product
+Sub packet 1 of 1
+Packet 125, total version 466
+Type 0: sum
+Sub packet 1 of 1
+Packet 126, total version 472
+Type 1: product
+Sub packet 1 of 1
+Packet 127, total version 472
+Type 3: maximum
+Sub packet 1
+Packet 128, total version 476
+Type 3: maximum
+Sub packet 1
+Packet 129, total version 477
+Type 3: maximum
+Sub packet 1
+Packet 130, total version 484
+Type 0: sum
+Sub packet 1
+Packet 131, total version 485
+Type 3: maximum
+Sub packet 1
+Packet 132, total version 487
+Type 0: sum
+Sub packet 1
+Packet 133, total version 492
+Type 3: maximum
+Sub packet 1
+Packet 134, total version 496
+Type 1: product
+Sub packet 1
+Packet 135, total version 501
+Type 3: maximum
+Sub packet 1
+Packet 136, total version 503
+Type 4: literal
+	Data value is 43
+Sub packet 8
+Packet 137, total version 509
+Type 4: literal
+	Data value is 375791589211
+Sub packet 15
+Packet 138, total version 515
+Type 2: minimum
+Sub packet 1
+Packet 139, total version 520
+Type 4: literal
+	Data value is 176
+Sub packet 8
+Packet 140, total version 525
+Type 4: literal
+	Data value is 438
+Sub packet 15
+Packet 141, total version 528
+Type 4: literal
+	Data value is 2272
+Sub packet 22
+Packet 142, total version 529
+Type 1: product
+Sub packet 1
+Packet 143, total version 529
+Type 4: literal
+	Data value is 3371
+Sub packet 8
+Packet 144, total version 536
+Type 6: less than
+Sub packet 1 of 2
+Packet 145, total version 539
+Type 4: literal
+	Data value is 24870
+Sub packet 2 of 2
+Packet 146, total version 545
+Type 4: literal
+	Data value is 192
+Sub packet 3 of 2
+Packet 147, total version 551
+Type 4: literal
+	Data value is 12
+Sub packet 4 of 2
+Packet 148, total version 554
+Type 4: literal
+	Data value is 20626
+Sub packet 5 of 2
+Packet 149, total version 559
+Type 2: minimum
+Sub packet 1 of 4
+Packet 150, total version 566
+Type 4: literal
+	Data value is 5
+Sub packet 2 of 4
+Packet 151, total version 569
+Type 4: literal
+	Data value is 61802
+Sub packet 3 of 4
+Packet 152, total version 570
+Type 4: literal
+	Data value is 252
+Sub packet 4 of 4
+Packet 153, total version 572
+Type 4: literal
+	Data value is 7340639596723
+Sub packet 5 of 4
+Packet 154, total version 572
+Type 2: minimum
+Sub packet 1 of 1
+Packet 155, total version 572
+Type 4: literal
+	Data value is 175
+Sub packet 2 of 1
+Packet 156, total version 576
+Type 1: product
+Sub packet 1
+Packet 157, total version 578
+Type 6: less than
+Sub packet 1
+Packet 158, total version 582
+Type 4: literal
+	Data value is 35841
+Sub packet 8
+Packet 159, total version 582
+Type 4: literal
+	Data value is 35841
+Sub packet 15
+Packet 160, total version 589
+Type 4: literal
+	Data value is 1
+Sub packet 22
+Packet 161, total version 591
+Type 4: literal
+	Data value is 10
+Sub packet 29
+Packet 162, total version 595
+Type 1: product
+Sub packet 1 of 2
+Packet 163, total version 597
+Type 6: less than
+Sub packet 1
+Packet 164, total version 599
+Type 4: literal
+	Data value is 667983
+Sub packet 8
+Packet 165, total version 604
+Type 4: literal
+	Data value is 2479419
+Sub packet 15
+Packet 166, total version 607
+Type 4: literal
+	Data value is 3976415
+Sub packet 22
+Packet 167, total version 612
+Type 0: sum
+Sub packet 1
+Packet 168, total version 617
+Type 1: product
+Sub packet 1 of 3
+Packet 169, total version 622
+Type 4: literal
+	Data value is 6
+Sub packet 2 of 3
+Packet 170, total version 622
+Type 4: literal
+	Data value is 12
+Sub packet 3 of 3
+Packet 171, total version 627
+Type 4: literal
+	Data value is 3
+Sub packet 4 of 3
+Packet 172, total version 632
+Type 1: product
+Sub packet 1 of 3
+Packet 173, total version 639
+Type 4: literal
+	Data value is 7
+Sub packet 2 of 3
+Packet 174, total version 645
+Type 4: literal
+	Data value is 8
+Sub packet 3 of 3
+Packet 175, total version 647
+Type 4: literal
+	Data value is 10
+Sub packet 4 of 3
+Packet 176, total version 650
+Type 1: product
+Sub packet 1
+Packet 177, total version 655
+Type 4: literal
+	Data value is 2
+Sub packet 8
+Packet 178, total version 656
+Type 4: literal
+	Data value is 8
+Sub packet 15
+Packet 179, total version 658
+Type 4: literal
+	Data value is 4
+Sub packet 22
+Packet 180, total version 664
+Type 1: product
+Sub packet 1
+Packet 181, total version 665
+Type 6: less than
+Sub packet 1 of 2
+Packet 182, total version 672
+Type 4: literal
+	Data value is 295267
+Sub packet 2 of 2
+Packet 183, total version 676
+Type 4: literal
+	Data value is 295267
+Sub packet 3 of 2
+Packet 184, total version 678
+Type 4: literal
+	Data value is 8
+Sub packet 4 of 2
+Packet 185, total version 681
+Type 3: maximum
+Sub packet 1 of 5
+Packet 186, total version 683
+Type 4: literal
+	Data value is 58535
+Sub packet 2 of 5
+Packet 187, total version 684
+Type 4: literal
+	Data value is 4014590532
+Sub packet 3 of 5
+Packet 188, total version 684
+Type 4: literal
+	Data value is 34
+Sub packet 4 of 5
+Packet 189, total version 684
+Type 4: literal
+	Data value is 53086862385
+Sub packet 5 of 5
+Packet 190, total version 685
+Type 4: literal
+	Data value is 953513
+Sub packet 6 of 5
+Packet 191, total version 690
+Type 3: maximum
+Sub packet 1
+Packet 192, total version 697
+Type 4: literal
+	Data value is 239
+Sub packet 8
+Packet 193, total version 699
+Type 4: literal
+	Data value is 283
+Sub packet 15
+Packet 194, total version 701
+Type 4: literal
+	Data value is 729288
+Sub packet 22
+Packet 195, total version 706
+Type 4: literal
+	Data value is 42295
+Sub packet 29
+Packet 196, total version 712
+Type 0: sum
+Sub packet 1
+Packet 197, total version 712
+Type 4: literal
+	Data value is 91
+Sub packet 8
+Packet 198, total version 719
+Type 4: literal
+	Data value is 439363
+Sub packet 15
+Packet 199, total version 719
+Type 4: literal
+	Data value is 241228265121
+Sub packet 22
+Packet 200, total version 725
+Type 4: literal
+	Data value is 3314
+Sub packet 29
+Packet 201, total version 731
+Type 4: literal
+	Data value is 817546689292
+Sub packet 36
+Packet 202, total version 736
+Type 3: maximum
+Sub packet 1 of 3
+Packet 203, total version 737
+Type 4: literal
+	Data value is 242657
+Sub packet 2 of 3
+Packet 204, total version 743
+Type 4: literal
+	Data value is 80
+Sub packet 3 of 3
+Packet 205, total version 744
+Type 4: literal
+	Data value is 369780
+Sub packet 4 of 3
+Packet 206, total version 745
+Type 1: product
+Sub packet 1 of 2
+Packet 207, total version 747
+Type 5: greater than
+Sub packet 1 of 2
+Packet 208, total version 750
+Type 0: sum
+Sub packet 1
+Packet 209, total version 751
+Type 4: literal
+	Data value is 15
+Sub packet 8
+Packet 210, total version 757
+Type 4: literal
+	Data value is 15
+Sub packet 15
+Packet 211, total version 764
+Type 4: literal
+	Data value is 11
+Sub packet 22
+Packet 212, total version 766
+Type 0: sum
+Sub packet 1
+Packet 213, total version 771
+Type 4: literal
+	Data value is 4
+Sub packet 8
+Packet 214, total version 771
+Type 4: literal
+	Data value is 6
+Sub packet 15
+Packet 215, total version 775
+Type 4: literal
+	Data value is 10
+Sub packet 22
+Packet 216, total version 778
+Type 4: literal
+	Data value is 118
+Sub packet 29
+Packet 217, total version 783
+Type 0: sum
+Sub packet 1
+Packet 218, total version 788
+Type 4: literal
+	Data value is 2946
+Sub packet 8
+Packet 219, total version 788
+Type 4: literal
+	Data value is 16851
+Sub packet 15
+Packet 220, total version 792
+Type 4: literal
+	Data value is 114
+Sub packet 22
+Packet 221, total version 795
+Type 4: literal
+	Data value is 2
+Sub packet 29
+Packet 222, total version 796
+Type 4: literal
+	Data value is 15
+Sub packet 36
+Packet 223, total version 803
+Type 1: product
+Sub packet 1
+Packet 224, total version 804
+Type 7: equal to
+Sub packet 1 of 2
+Packet 225, total version 808
+Type 4: literal
+	Data value is 44164
+Sub packet 2 of 2
+Packet 226, total version 813
+Type 4: literal
+	Data value is 44164
+Sub packet 3 of 2
+Packet 227, total version 817
+Type 4: literal
+	Data value is 26058
+Sub packet 4 of 2
+Packet 228, total version 823
+Type 1: product
+Sub packet 1 of 2
+Packet 229, total version 825
+Type 4: literal
+	Data value is 7
+Sub packet 2 of 2
+Packet 230, total version 830
+Type 6: less than
+Sub packet 1 of 2
+Packet 231, total version 837
+Type 4: literal
+	Data value is 358
+Sub packet 2 of 2
+Packet 232, total version 838
+Type 4: literal
+	Data value is 10411184
+Sub packet 3 of 2
+Packet 233, total version 841
+Type 0: sum
+Sub packet 1
+Packet 234, total version 846
+Type 4: literal
+	Data value is 4
+Sub packet 8
+Packet 235, total version 848
+Type 4: literal
+	Data value is 2348
+Sub packet 15
+Packet 236, total version 851
+Type 4: literal
+	Data value is 48212975426
+Sub packet 22
+Packet 237, total version 857
+Type 4: literal
+	Data value is 215553481
+Sub packet 29
+Packet 238, total version 858
+Type 1: product
+Sub packet 1
+Packet 239, total version 858
+Type 5: greater than
+Sub packet 1 of 2
+Packet 240, total version 865
+Type 0: sum
+Sub packet 1
+Packet 241, total version 867
+Type 4: literal
+	Data value is 15
+Sub packet 8
+Packet 242, total version 867
+Type 4: literal
+	Data value is 11
+Sub packet 15
+Packet 243, total version 871
+Type 4: literal
+	Data value is 13
+Sub packet 22
+Packet 244, total version 878
+Type 0: sum
+Sub packet 1
+Packet 245, total version 880
+Type 4: literal
+	Data value is 6
+Sub packet 8
+Packet 246, total version 880
+Type 4: literal
+	Data value is 4
+Sub packet 15
+Packet 247, total version 884
+Type 4: literal
+	Data value is 4
+Sub packet 22
+Packet 248, total version 888
+Type 4: literal
+	Data value is 136
+Sub packet 29
+Packet 249, total version 891
+Type 1: product
+Sub packet 1 of 2
+Packet 250, total version 892
+Type 7: equal to
+Sub packet 1
+Packet 251, total version 893
+Type 0: sum
+Sub packet 1 of 3
+Packet 252, total version 896
+Type 4: literal
+	Data value is 9
+Sub packet 2 of 3
+Packet 253, total version 896
+Type 4: literal
+	Data value is 11
+Sub packet 3 of 3
+Packet 254, total version 903
+Type 4: literal
+	Data value is 7
+Sub packet 4 of 3
+Packet 255, total version 909
+Type 0: sum
+Sub packet 1 of 3
+Packet 256, total version 910
+Type 4: literal
+	Data value is 10
+Sub packet 2 of 3
+Packet 257, total version 916
+Type 4: literal
+	Data value is 11
+Sub packet 3 of 3
+Packet 258, total version 919
+Type 4: literal
+	Data value is 13
+Sub packet 4 of 3
+Packet 259, total version 924
+Type 4: literal
+	Data value is 5763
+Sub packet 5 of 3
+Packet 260, total version 930
+Type 0: sum
+Sub packet 1 of 1
+Packet 261, total version 933
+Type 4: literal
+	Data value is 1747
+Sub packet 2 of 1
+Packet 262, total version 937
+Type 1: product
+Sub packet 1 of 4
+Packet 263, total version 937
+Type 4: literal
+	Data value is 2
+Sub packet 2 of 4
+Packet 264, total version 944
+Type 4: literal
+	Data value is 167
+Sub packet 3 of 4
+Packet 265, total version 950
+Type 4: literal
+	Data value is 137
+Sub packet 4 of 4
+Packet 266, total version 951
+Type 4: literal
+	Data value is 26
+Sub packet 5 of 4
+Packet 267, total version 956
+Type 3: maximum
+Sub packet 1
+Packet 268, total version 963
+Type 4: literal
+	Data value is 2517
+Total version is 963
+sum
+product
+greater than
+product
+equal to
+product
+less than
+sum
+sum
+maximum
+product
+greater than
+product
+less than
+sum
+sum
+product
+minimum
+product
+equal to
+product
+product
+less than
+product
+greater than
+product
+product
+greater than
+sum
+product
+greater than
+product
+product
+sum
+sum
+sum
+product
+greater than
+minimum
+product
+product
+sum
+maximum
+sum
+sum
+minimum
+minimum
+product
+sum
+product
+maximum
+maximum
+maximum
+sum
+maximum
+sum
+maximum
+product
+maximum
+minimum
+product
+less than
+minimum
+minimum
+product
+less than
+product
+less than
+sum
+product
+product
+product
+product
+less than
+maximum
+maximum
+sum
+maximum
+product
+greater than
+sum
+sum
+sum
+product
+equal to
+product
+less than
+sum
+product
+greater than
+sum
+sum
+product
+equal to
+sum
+sum
+sum
+product
+maximum
+[sum product 345367612077 greater than 848322 3213630547 product equal to 14871 863441 1845 product 48216 less than sum 12 14 10 sum 12 15 4 maximum 29054 47144 product 238 greater than 1820 141 product 87 less than sum 12 11 6 sum 14 5 14 product 196 657596 9 minimum 6794974 163690 737800 110541992 3 product equal to 29725 2480 37614 15811746 product 163 201 79 26 192 product less than 5691913 1618 15525854 product greater than 3066 5890575 3931 product 128 144 product greater than 254374 179 172 sum 13 14 product 88 greater than 500 500 56 product 40 177 48 product sum 10 3 12 sum 9 7 15 sum 10 13 4 product greater than 184 184 61 minimum 224824157 6 product product sum maximum sum sum minimum minimum product sum product maximum maximum maximum sum maximum sum maximum product maximum 43 375791589211 minimum 176 438 2272 product 3371 less than 24870 192 12 20626 minimum 5 61802 252 7340639596723 minimum 175 product less than 35841 35841 1 10 product less than 667983 2479419 3976415 sum product 6 12 3 product 7 8 10 product 2 8 4 product less than 295267 295267 8 maximum 58535 4014590532 34 53086862385 953513 maximum 239 283 729288 42295 sum 91 439363 241228265121 3314 817546689292 maximum 242657 80 369780 product greater than sum 15 15 11 sum 4 6 10 118 sum 2946 16851 114 2 15 product equal to 44164 44164 26058 product 7 less than 358 10411184 sum 4 2348 48212975426 215553481 product greater than sum 15 11 13 sum 6 4 4 136 product equal to sum 9 11 7 sum 10 11 13 5763 sum 1747 product 2 167 137 26 maximum 2517]
+	Val stack length: 0
+	Val stack length: 1
+maximum ( 2517 ) = 2517
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+	Val stack length: 4
+	Val stack length: 5
+product ( 2 167 137 26 2517 ) = 2994495036
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+sum ( 1747 2994495036 ) = 2994496783
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+	Val stack length: 4
+	Val stack length: 5
+sum ( 10 11 13 5763 2994496783 ) = 2994502580
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+	Val stack length: 4
+sum ( 9 11 7 2994502580 ) = 2994502607
+	Val stack length: 0
+	Val stack length: 1
+== op: Val stack length: 1
+( 2994502607 == 0 ) = 0
+	Val stack length: 0
+	Val stack length: 1
+product ( 0 ) = 0
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+	Val stack length: 4
+	Val stack length: 5
+sum ( 6 4 4 136 0 ) = 150
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+	Val stack length: 4
+sum ( 15 11 13 150 ) = 189
+	Val stack length: 0
+	Val stack length: 1
+> op: Val stack length: 1
+( 189 > 0 ) = 1
+	Val stack length: 0
+	Val stack length: 1
+product ( 1 ) = 1
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+	Val stack length: 4
+	Val stack length: 5
+sum ( 4 2348 48212975426 215553481 1 ) = 48428531260
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+< op: Val stack length: 3
+( 358 < 10411184 ) = 1
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+product ( 7 1 48428531260 ) = 338999718820
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+	Val stack length: 4
+== op: Val stack length: 4
+( 44164 == 44164 ) = 1
+	Val stack length: 2
+	Val stack length: 3
+product ( 1 26058 338999718820 ) = 8833654673011560
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+	Val stack length: 4
+	Val stack length: 5
+	Val stack length: 6
+sum ( 2946 16851 114 2 15 8833654673011560 ) = 8833654673031488
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+	Val stack length: 4
+	Val stack length: 5
+sum ( 4 6 10 118 8833654673031488 ) = 8833654673031626
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+	Val stack length: 4
+sum ( 15 15 11 8833654673031626 ) = 8833654673031667
+	Val stack length: 0
+	Val stack length: 1
+> op: Val stack length: 1
+( 8833654673031667 > 0 ) = 1
+	Val stack length: 0
+	Val stack length: 1
+product ( 1 ) = 1
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+	Val stack length: 4
+maximum ( 242657 80 369780 1 ) = 369780
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+	Val stack length: 4
+	Val stack length: 5
+	Val stack length: 6
+sum ( 91 439363 241228265121 3314 817546689292 369780 ) = 1058775766961
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+	Val stack length: 4
+	Val stack length: 5
+maximum ( 239 283 729288 42295 1058775766961 ) = 1058775766961
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+	Val stack length: 4
+	Val stack length: 5
+	Val stack length: 6
+maximum ( 58535 4014590532 34 53086862385 953513 1058775766961 ) = 1058775766961
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+	Val stack length: 4
+< op: Val stack length: 4
+( 295267 < 295267 ) = 0
+	Val stack length: 2
+	Val stack length: 3
+product ( 0 8 1058775766961 ) = 0
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+	Val stack length: 4
+product ( 2 8 4 0 ) = 0
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+	Val stack length: 4
+product ( 7 8 10 0 ) = 0
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+	Val stack length: 4
+product ( 6 12 3 0 ) = 0
+	Val stack length: 0
+	Val stack length: 1
+sum ( 0 ) = 0
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+	Val stack length: 4
+< op: Val stack length: 4
+( 667983 < 2479419 ) = 1
+	Val stack length: 2
+	Val stack length: 3
+product ( 1 3976415 0 ) = 0
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+	Val stack length: 4
+	Val stack length: 5
+< op: Val stack length: 5
+( 35841 < 35841 ) = 0
+	Val stack length: 3
+	Val stack length: 4
+product ( 0 1 10 0 ) = 0
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+minimum ( 175 0 ) = 0
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+	Val stack length: 4
+	Val stack length: 5
+minimum ( 5 61802 252 7340639596723 0 ) = 0
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+	Val stack length: 4
+	Val stack length: 5
+< op: Val stack length: 5
+( 24870 < 192 ) = 0
+	Val stack length: 3
+	Val stack length: 4
+	Val stack length: 5
+product ( 3371 0 12 20626 0 ) = 0
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+	Val stack length: 4
+minimum ( 176 438 2272 0 ) = 0
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+maximum ( 43 375791589211 0 ) = 375791589211
+	Val stack length: 0
+	Val stack length: 1
+product ( 375791589211 ) = 375791589211
+	Val stack length: 0
+	Val stack length: 1
+maximum ( 375791589211 ) = 375791589211
+	Val stack length: 0
+	Val stack length: 1
+sum ( 375791589211 ) = 375791589211
+	Val stack length: 0
+	Val stack length: 1
+maximum ( 375791589211 ) = 375791589211
+	Val stack length: 0
+	Val stack length: 1
+sum ( 375791589211 ) = 375791589211
+	Val stack length: 0
+	Val stack length: 1
+maximum ( 375791589211 ) = 375791589211
+	Val stack length: 0
+	Val stack length: 1
+maximum ( 375791589211 ) = 375791589211
+	Val stack length: 0
+	Val stack length: 1
+maximum ( 375791589211 ) = 375791589211
+	Val stack length: 0
+	Val stack length: 1
+product ( 375791589211 ) = 375791589211
+	Val stack length: 0
+	Val stack length: 1
+sum ( 375791589211 ) = 375791589211
+	Val stack length: 0
+	Val stack length: 1
+product ( 375791589211 ) = 375791589211
+	Val stack length: 0
+	Val stack length: 1
+minimum ( 375791589211 ) = 375791589211
+	Val stack length: 0
+	Val stack length: 1
+minimum ( 375791589211 ) = 375791589211
+	Val stack length: 0
+	Val stack length: 1
+sum ( 375791589211 ) = 375791589211
+	Val stack length: 0
+	Val stack length: 1
+sum ( 375791589211 ) = 375791589211
+	Val stack length: 0
+	Val stack length: 1
+maximum ( 375791589211 ) = 375791589211
+	Val stack length: 0
+	Val stack length: 1
+sum ( 375791589211 ) = 375791589211
+	Val stack length: 0
+	Val stack length: 1
+product ( 375791589211 ) = 375791589211
+	Val stack length: 0
+	Val stack length: 1
+product ( 375791589211 ) = 375791589211
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+minimum ( 224824157 6 375791589211 ) = 6
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+	Val stack length: 4
+> op: Val stack length: 4
+( 184 > 184 ) = 0
+	Val stack length: 2
+	Val stack length: 3
+product ( 0 61 6 ) = 0
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+	Val stack length: 4
+sum ( 10 13 4 0 ) = 27
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+	Val stack length: 4
+sum ( 9 7 15 27 ) = 58
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+	Val stack length: 4
+sum ( 10 3 12 58 ) = 83
+	Val stack length: 0
+	Val stack length: 1
+product ( 83 ) = 83
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+	Val stack length: 4
+product ( 40 177 48 83 ) = 28206720
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+	Val stack length: 4
+> op: Val stack length: 4
+( 500 > 500 ) = 0
+	Val stack length: 2
+	Val stack length: 3
+	Val stack length: 4
+product ( 88 0 56 28206720 ) = 0
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+sum ( 13 14 0 ) = 27
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+	Val stack length: 4
+> op: Val stack length: 4
+( 254374 > 179 ) = 1
+	Val stack length: 2
+	Val stack length: 3
+product ( 1 172 27 ) = 4644
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+product ( 128 144 4644 ) = 85598208
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+	Val stack length: 4
+> op: Val stack length: 4
+( 3066 > 5890575 ) = 0
+	Val stack length: 2
+	Val stack length: 3
+product ( 0 3931 85598208 ) = 0
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+	Val stack length: 4
+< op: Val stack length: 4
+( 5691913 < 1618 ) = 0
+	Val stack length: 2
+	Val stack length: 3
+product ( 0 15525854 0 ) = 0
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+	Val stack length: 4
+	Val stack length: 5
+	Val stack length: 6
+product ( 163 201 79 26 192 0 ) = 0
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+	Val stack length: 4
+	Val stack length: 5
+== op: Val stack length: 5
+( 29725 == 2480 ) = 0
+	Val stack length: 3
+	Val stack length: 4
+product ( 0 37614 15811746 0 ) = 0
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+	Val stack length: 4
+	Val stack length: 5
+	Val stack length: 6
+minimum ( 6794974 163690 737800 110541992 3 0 ) = 0
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+	Val stack length: 4
+product ( 196 657596 9 0 ) = 0
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+	Val stack length: 4
+sum ( 14 5 14 0 ) = 33
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+	Val stack length: 4
+sum ( 12 11 6 33 ) = 62
+	Val stack length: 0
+	Val stack length: 1
+< op: Val stack length: 1
+( 62 < 0 ) = 0
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+product ( 87 0 ) = 0
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+> op: Val stack length: 3
+( 1820 > 141 ) = 1
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+product ( 238 1 0 ) = 0
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+maximum ( 29054 47144 0 ) = 47144
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+	Val stack length: 4
+sum ( 12 15 4 47144 ) = 47175
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+	Val stack length: 4
+sum ( 12 14 10 47175 ) = 47211
+	Val stack length: 0
+	Val stack length: 1
+< op: Val stack length: 1
+( 47211 < 0 ) = 0
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+product ( 48216 0 ) = 0
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+	Val stack length: 4
+== op: Val stack length: 4
+( 14871 == 863441 ) = 0
+	Val stack length: 2
+	Val stack length: 3
+product ( 0 1845 0 ) = 0
+	Val stack length: 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+> op: Val stack length: 3
+( 848322 > 3213630547 ) = 0
+	Val stack length: 1
+	Val stack length: 2
+	Val stack length: 3
+product ( 345367612077 0 0 ) = 0
+	Val stack length: 0
+	Val stack length: 1
+sum ( 0 ) = 0
+	Val stack length: 0

@@ -139,7 +139,7 @@ func printGrid(grid [][]int) {
 
 func main() {
 
-	text := utils.ReadInput()
+	text := utils.ReadInput(1)
 	segments, maxVal := createSegments(text)
 	fmt.Printf("We have %d segments with max value %d\n", len(segments), maxVal)
 	grid := makeGrid(maxVal)
