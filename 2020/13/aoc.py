@@ -4,6 +4,7 @@ import os
 import re
 import time
 from collections import defaultdict
+from functools import reduce
 
 DIRPATH = os.path.dirname(os.path.realpath(__file__))
 DATA = os.path.join(DIRPATH, 'input.txt')
@@ -49,8 +50,6 @@ def temp():
             i += 1
     print(b[0]*i, b[1]*j + 1)
 
-        
-
 # chinese remainder theorem
 def do_crt(data):
     # need to make equations in the form
@@ -83,7 +82,7 @@ def do_crt(data):
     total = 0
     for i in range(0, len(n_list)):
         total += b_list[i] * (int(N/n_list[i])) * x_list[i]
-
+  # 7,13,x,x,59,x,31,19
   # x = b**(n-2) % n
   # x =   mod(7)
     x = 0**(7-2) % 7 
@@ -98,6 +97,27 @@ def do_crt(data):
 
     return total 
 
+# n are the coprime numbers, bus ids
+# a is the sequence of numbers, time offsets
+def chinese_remainder(n, a):
+    sum = 0
+    prod = reduce(lambda a, b: a*b, n)
+    for n_i, a_i in zip(n, a):
+        p = prod // n_i
+        sum += a_i * mul_inv(p, n_i) * p
+    return sum % prod
+ 
+def mul_inv(a, b):
+    b0 = b
+    x0, x1 = 0, 1
+    if b == 1: return 1
+    while a > 1:
+        q = a // b
+        a, b = b, a%b
+        x0, x1 = x1 - q * x0, x0
+    if x1 < 0: x1 += b0
+    return x1
+ 
 
 def part1(data):
     print("Part 1")
@@ -109,12 +129,24 @@ def part1(data):
 def part2(data):
     print("Part 2")
     timetable = re.split(r',', data[1])
-    print(do_crt(timetable))
+    # from the timetable, split out the bus ids and the offset from t0
+    a_list = []
+    n_list = []
+    for a, n in enumerate(timetable):
+        if n != 'x':
+            a_list.append(a)
+            n_list.append(int(n))
+    print(timetable)
+    print("n: {}".format(n_list))
+    print("a: {}".format(a_list))
+    
+    print(chinese_remainder(n_list, a_list))
+    find_convergence(timetable)
 
 def main():
     print("Day {}".format(os.path.split(DIRPATH)[1]))
 
-    with open(TEST) as file:
+    with open(DATA) as file:
         data = file.read().splitlines()
     temp()
 
